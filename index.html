@@ -13,16 +13,16 @@
 <body>
   <header class="topbar">
     <div class="container nav">
-      <a href="#top" class="nav-logo"><img src="assets/allianz-distribuidor.png" alt="Distribuidor Autorizado Allianz"></a>
+      <div class="brand">TU <span>RETIRO</span></div>
       <a class="mini-cta" href="#calculadora">Calcula tu retiro</a>
     </div>
   </header>
 
-  <main id="top">
+  <main>
     <section class="hero page">
       <div class="container hero-grid">
         <div class="hero-copy">
-          <div class="optima-brand"><span>OptiMaxx</span> <b>plus</b><small>Tu futuro empieza hoy</small></div>
+          <img class="allianz-badge hero-badge" src="assets/allianz-distribuidor.png" alt="Distribuidor Autorizado Allianz">
           <p class="eyebrow">PLANEACIÓN PATRIMONIAL</p>
           <h1>Planea hoy.<br><em>Vive mañana.</em></h1>
           <p class="lead">Descubre cuánto podrías necesitar para construir el retiro que quieres y qué estrategia puede tener sentido para ti.</p>
@@ -37,7 +37,8 @@
           </div>
         </div>
         <div class="hero-photo-wrap">
-          <img src="assets/hero-couple-generated.jpg" alt="Pareja disfrutando de su futuro juntos">
+          <img src="assets/hero-georgina.jpg" alt="Georgina en su oficina">
+          <div class="photo-caption"><strong>Georgina</strong><br>Agente de seguros certificada</div>
         </div>
       </div>
     </section>
@@ -80,45 +81,59 @@
               <button type="button" class="choice" data-value="ambas">Ambas</button>
             </div>
 
-            <div class="field-label">¿Cuándo te gustaría empezar?</div>
-            <div class="choice-grid" id="timingChoices">
-              <button type="button" class="choice active" data-value="mes">Este mes</button>
-              <button type="button" class="choice" data-value="3meses">Próximos 3 meses</button>
-              <button type="button" class="choice" data-value="año">Este año</button>
-              <button type="button" class="choice" data-value="investigando">Solo estoy investigando</button>
+            <div class="tax-choice">
+              <div class="field-label">Deducción de impuestos <span>¿Sí o no?</span></div>
+              <p>Si facturas ante el SAT, podrías tener un beneficio fiscal, según tu ISR y las condiciones aplicables.</p>
+              <div class="choice-grid" id="taxChoices">
+                <button type="button" class="choice active" data-value="si">Sí</button>
+                <button type="button" class="choice" data-value="no">No</button>
+              </div>
             </div>
 
-            <button id="calculate" class="btn btn-green btn-full">Ver mi proyección</button>
+            <button id="calculate" class="btn btn-green btn-full">CALCULA TU RETIRO</button>
           </div>
 
           <div class="calc-result">
             <div class="result-top">
-              <span class="result-label">PATRIMONIO PROYECTADO AL RETIRO</span>
+              <span class="result-label">RESULTADO ESTIMADO</span>
+              <h3 class="result-title">Tu escenario de retiro</h3>
+              <p class="result-subtitle">Una primera referencia con los datos que acabas de ingresar.</p>
+            </div>
+
+            <div class="summary-list">
+              <div><span>Años de inversión</span><strong id="summaryYears">27 años</strong></div>
+              <div><span>Edad de término</span><strong id="summaryAge">65 años</strong></div>
+              <div><span>Capital invertido</span><strong id="summaryContrib">$4,860,000</strong></div>
+              <div><span>Interés / crecimiento estimado</span><strong id="summaryGrowth">$6,738,203</strong></div>
+            </div>
+
+            <div class="final-result">
+              <span>Capital final a la edad de retiro</span>
               <strong id="futureValue">$12,098,203</strong>
-              <span class="illustrative">Proyección ilustrativa · <b id="realValue">$5,000,000</b> en pesos de hoy</span>
+              <small>Proyección ilustrativa. Total de tus aportaciones más crecimiento estimado.</small>
             </div>
-            <div class="chart-wrap">
-              <div class="chart-meta">
-                <span>Hoy <b id="ageStart">38 años</b></span>
-                <span><b id="monthlyLabel">$15,000/mes</b></span>
-                <span>Retiro <b id="ageEnd">65 años</b></span>
-              </div>
-              <div id="barChart" class="bar-chart" aria-label="Gráfica de aportaciones y crecimiento proyectado"></div>
-              <div class="legend">
+
+            <div class="simple-progress" aria-label="Aportaciones y crecimiento proyectado">
+              <div class="progress-track"><span id="contribBar"></span><span id="growthBar"></span></div>
+              <div class="progress-legend">
                 <span><i class="dot dot-blue"></i> Lo que tú aportas</span>
-                <span><i class="dot dot-green"></i> Crecimiento proyectado</span>
+                <span><i class="dot dot-green"></i> Crecimiento estimado</span>
               </div>
             </div>
-            <div class="result-cards">
-              <div><span>Aportación mensual</span><strong id="cardMonthly">$15,000 MXN</strong></div>
-              <div><span>Total aportado</span><strong id="cardContrib">$4,860,000 MXN</strong></div>
-              <div><span>Crecimiento estimado</span><strong id="cardGrowth">$6,738,203 MXN</strong></div>
+
+            <div class="fiscal-result" id="fiscalResult">
+              <div>
+                <span>Beneficio fiscal estimado</span>
+                <strong id="fiscalValue">$36,000</strong>
+                <small>Estimación ilustrativa equivalente al 20% de tus aportaciones anuales.</small>
+              </div>
             </div>
+
             <div class="goal-box">
               <div><span>Meta patrimonial de referencia</span><strong id="targetValue">$21,000,000</strong><small>Con base en el ingreso mensual que indicaste y una referencia ilustrativa de 4% anual.</small></div>
-              <div><span>Brecha estimada</span><strong id="gapValue">$8,901,797</strong><small id="gapLabel">Lo que faltaría para alcanzar esa referencia en pesos de hoy.</small></div>
+              <div><span>Brecha estimada</span><strong id="gapValue">$8,901,797</strong><small id="gapLabel">Lo que faltaría para alcanzar esa referencia.</small></div>
             </div>
-            <p class="disclaimer">* Proyección educativa con supuesto de <b>10% anual nominal</b>, capitalización mensual e <b>inflación de 4% anual</b>. Las cifras en “pesos de hoy” descuentan inflación para mostrar poder adquisitivo aproximado. La aportación mensual se mantiene constante en el cálculo. La meta usa 4% anual únicamente como referencia educativa; no es una recomendación, garantía ni promesa de rendimiento. Los resultados reales dependen de aportaciones, plazo, costos, impuestos, condiciones del producto y comportamiento de las inversiones.</p>
+            <p class="disclaimer">* Proyección ilustrativa con supuesto de 6% anual nominal y capitalización mensual. El beneficio fiscal mostrado usa 20% únicamente como referencia educativa; no es una garantía ni sustituye el cálculo fiscal de tu situación particular. La aplicación de beneficios depende de la legislación vigente, del producto contratado y de las circunstancias del contribuyente.</p>
           </div>
         </div>
       </div>
@@ -178,7 +193,7 @@
             <div><b>Beneficios fiscales</b><span>Tratamiento fiscal según la modalidad contratada y tu situación.</span></div>
             <div><b>Respaldo Allianz</b><span>Experiencia internacional en servicios financieros y de seguros.</span></div>
           </div>
-          <a class="btn btn-green" href="#contacto">Quiero conocer mi opción</a>
+          <a class="btn btn-green" href="#contacto">AGENDAR UNA CITA</a>
           <small class="legal-note">Las características, beneficios, disponibilidad y tratamiento fiscal dependen de las condiciones del plan y de la situación particular del contratante.</small>
         </div>
       </div>

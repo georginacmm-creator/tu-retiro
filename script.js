@@ -1,6 +1,5 @@
 const CONFIG = {
-  annualRate: 0.10, // illustrative only
-  inflationRate: 0.04, // illustrative only
+  annualRate: 0.06, // illustrative only
   calendly: "https://calendly.com/georgina-inviertemas/fondosindexados",
   whatsapp: "525572449150"
 };
@@ -22,49 +21,34 @@ function calculate(){
   const futureValue = futureContrib + futureCurrent;
   const totalContrib = monthly*months + currentSavings;
   const growth = Math.max(0, futureValue-totalContrib);
+  const fiscalEnabled = document.querySelector("#taxChoices .choice.active")?.dataset.value !== "no";
+  const fiscalBenefit = fiscalEnabled ? monthly * 12 * 0.20 : 0;
 
   $("futureValue").textContent = money(futureValue);
   $("cardMonthly").textContent = `${money(monthly)} MXN`;
   $("cardContrib").textContent = `${money(totalContrib)} MXN`;
-  $("cardGrowth").textContent = `${money(growth)} MXN`;
-  const years = retireAge - age;
-  const realFutureValue = futureValue / Math.pow(1 + CONFIG.inflationRate, years);
+  $("cardGrowth") && ($("cardGrowth").textContent = `${money(growth)} MXN`);
+  $("summaryYears").textContent = `${retireAge-age} años`;
+  $("summaryAge").textContent = `${retireAge} años`;
+  $("summaryContrib").textContent = money(totalContrib);
+  $("summaryGrowth").textContent = money(growth);
+  $("fiscalValue").textContent = money(fiscalBenefit);
   const targetValue = retirementIncome * 12 / 0.04;
-  const gap = Math.max(0, targetValue - realFutureValue);
-  $("realValue").textContent = money(realFutureValue);
+  const gap = Math.max(0, targetValue - futureValue);
   $("targetValue").textContent = money(targetValue);
   $("gapValue").textContent = money(gap);
-  $("gapLabel").textContent = gap > 0 ? "Lo que faltaría para alcanzar esa referencia, expresado en pesos de hoy." : "La proyección alcanza o supera esta referencia ilustrativa en pesos de hoy.";
+  $("gapLabel").textContent = gap > 0 ? "Lo que faltaría para alcanzar esa referencia." : "La proyección supera esta referencia ilustrativa.";
   $("ageStart").textContent = `${age} años`;
   $("ageEnd").textContent = `${retireAge} años`;
   $("monthlyLabel").textContent = `${money(monthly)}/mes`;
 
-  renderChart(age, retireAge, monthly, currentSavings, r);
+  renderSimpleProgress(totalContrib, growth);
 }
 
-function renderChart(age, retireAge, monthly, currentSavings, r){
-  const chart = $("barChart");
-  chart.innerHTML = "";
-  const years = retireAge-age;
-  const count = Math.min(27, Math.max(12, years));
-  for(let i=0;i<count;i++){
-    const t = Math.max(0, Math.round((i/(count-1))*years*12));
-    const months = t;
-    const contrib = monthly*months + currentSavings;
-    const growthPart = r === 0 ? 0 : (currentSavings*Math.pow(1+r,months) + monthly*((Math.pow(1+r,months)-1)/r)) - contrib;
-    const total = Math.max(1, contrib+Math.max(0,growthPart));
-    const h = 10 + 220*(total/(1+total)); // replaced below with normalized scale
-    const bars = [];
-    bars.push({el:null,total,contrib,growthPart});
-    // store temporarily
-    const div = document.createElement("div");
-    div.className = "bar";
-    const normalized = 30 + 70*(Math.log10(1+total)/Math.max(1,Math.log10(1+(monthly*Math.max(1,years)*12+currentSavings)*3)));
-    div.style.height = `${Math.min(100, normalized)}%`;
-    const ratio = total ? Math.max(0,Math.min(1,growthPart/total)) : 0;
-    div.style.background = `linear-gradient(to top, var(--blue) 0 ${Math.round((1-ratio)*100)}%, var(--green) ${Math.round((1-ratio)*100)}% 100%)`;
-    chart.appendChild(div);
-  }
+function renderSimpleProgress(contrib, growth){
+  const total = Math.max(1, contrib + growth);
+  $("contribBar").style.width = `${(contrib/total)*100}%`;
+  $("growthBar").style.width = `${(growth/total)*100}%`;
 }
 
 function activateChoices(groupId){
@@ -79,7 +63,7 @@ function activateChoices(groupId){
 $("calculate").addEventListener("click", calculate);
 ["age","retireAge","income","currentSavings","monthly","retirementIncome"].forEach(id => $(id).addEventListener("input", calculate));
 activateChoices("interestChoices");
-activateChoices("timingChoices");
+activateChoices("taxChoices");
 
 $("leadForm").addEventListener("submit",(e)=>{
   e.preventDefault();
