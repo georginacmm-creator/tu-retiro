@@ -102,8 +102,8 @@
             <div class="simple-progress" aria-label="Aportaciones y crecimiento proyectado">
               <div class="progress-track"><span id="contribBar"></span><span id="growthBar"></span></div>
               <div class="progress-legend">
-                <span><i class="dot dot-blue"></i> Lo que tú aportas <strong id="contribLegendValue">$0</strong></span>
-                <span><i class="dot dot-green"></i> Crecimiento estimado <strong id="growthLegendValue">$0</strong></span>
+                <span><i class="dot dot-blue"></i> Lo que tú aportas</span>
+                <span><i class="dot dot-green"></i> Crecimiento estimado</span>
               </div>
             </div>
 
@@ -129,16 +129,21 @@
             <h2>¿Quieres que revise tu escenario contigo?</h2>
             <p>Déjame tus datos y agenda directamente una llamada conmigo para revisar tu objetivo, tu capacidad de aportación y las alternativas que podrían aplicar a tu situación.</p>
           </div>
+          <div class="lead-scenario" aria-live="polite">
+            <div><span>Tu escenario</span><strong id="leadScenarioValue">—</strong></div>
+            <div><span>Tu aportación mensual</span><strong id="leadMonthlyValue">—</strong></div>
+          </div>
           <form id="leadForm" class="lead-form">
-            <input name="name" required placeholder="Nombre completo">
-            <input name="whatsapp" required placeholder="WhatsApp">
-            <input name="email" type="email" required placeholder="Correo electrónico">
+            <input name="name" autocomplete="name" required placeholder="Nombre completo">
+            <input name="whatsapp" autocomplete="tel" inputmode="tel" required placeholder="WhatsApp">
+            <input name="email" type="email" autocomplete="email" required placeholder="Correo electrónico">
             <input name="savings" inputmode="numeric" required placeholder="¿Cuánto quieres ahorrar al mes?">
-            <input name="profession" required placeholder="Profesión u ocupación">
+            <input name="profession" autocomplete="organization-title" required placeholder="Profesión u ocupación">
             <button class="btn btn-green btn-full" type="submit">Quiero revisar mi estrategia</button>
+            <p class="form-helper">Al enviar tus datos podrás elegir fecha y hora para hablar conmigo.</p>
             <p id="formMessage" class="form-message"></p>
           </form>
-          <a id="calendlyBtn" class="btn btn-outline btn-full" href="https://calendly.com/georgina-inviertemas/fondosindexados" target="_blank" rel="noopener">Agenda mi llamada en Calendly</a>
+          <a id="calendlyBtn" class="btn btn-outline btn-full" href="https://calendly.com/georgina-inviertemas/fondosindexados" target="_blank" rel="noopener">Prefiero agendar directamente</a>
         </div>
       </div>
     </section>
