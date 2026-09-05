@@ -88,9 +88,9 @@ h3{font-size:24px;color:var(--blue)}
 .final-result small{display:block;font-size:11px;line-height:1.4;opacity:.9}
 .simple-progress{margin-top:22px}
 .progress-track{height:18px;border-radius:999px;background:#e9f0f6;overflow:hidden;display:flex}
-.progress-track span{display:block;height:100%}
-#contribBar{background:var(--blue)}
-#growthBar{background:var(--green)}
+.progress-track span{display:block;height:100%;flex:0 0 auto}
+#contribBar{background:var(--blue);border-radius:999px 0 0 999px}
+#growthBar{background:var(--green);border-radius:0 999px 999px 0}
 .progress-legend{display:flex;justify-content:space-between;gap:15px;margin-top:8px;font-size:11px;color:var(--muted)}
 .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px}.dot-blue{background:var(--blue)}.dot-green{background:var(--green)}
 .fiscal-result{margin-top:18px;background:#eaf5ff;border:1px solid #d5e7f5;border-radius:16px;padding:18px 20px}
