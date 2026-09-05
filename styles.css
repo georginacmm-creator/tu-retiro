@@ -63,7 +63,7 @@ h3{font-size:24px;color:var(--blue)}
 .money-input{display:flex;align-items:center;border:1px solid #ccd8e4;border-radius:12px;margin-top:7px}
 .money-input span{padding-left:14px;color:var(--muted)}
 .money-input input{border:0;margin:0}
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}.field-row label{display:grid;grid-template-rows:42px auto;gap:8px;line-height:1.35;min-width:0;align-items:start}.field-row label input{margin-top:0;width:100%;box-sizing:border-box}
 .field-label{font-size:13px;font-weight:800;color:#405066;margin:26px 0 10px}
 .choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .choice{border:1px solid var(--line);background:#fff;padding:13px;border-radius:12px;text-align:left;color:#526276;cursor:pointer}

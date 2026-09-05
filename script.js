@@ -1,5 +1,6 @@
 const CONFIG = {
-  annualRate: 0.06, // illustrative only
+  annualRate: 0.10, // illustrative only
+  annualInflation: 0.04, // illustrative only
   calendly: "https://calendly.com/georgina-inviertemas/fondosindexados",
   whatsapp: "525572449150"
 };
@@ -33,7 +34,9 @@ function calculate(){
   $("summaryContrib").textContent = money(totalContrib);
   $("summaryGrowth").textContent = money(growth);
   $("fiscalValue").textContent = money(fiscalBenefit);
-  const targetValue = retirementIncome * 12 / 0.04;
+  const inflationFactor = Math.pow(1 + CONFIG.annualInflation, retireAge-age);
+  const retirementIncomeAtRetirement = retirementIncome * inflationFactor;
+  const targetValue = retirementIncomeAtRetirement * 12 / 0.04;
   const gap = Math.max(0, targetValue - futureValue);
   $("targetValue").textContent = money(targetValue);
   $("gapValue").textContent = money(gap);

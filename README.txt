@@ -1,37 +1,30 @@
-# Landing Tu Retiro — versión funcional
+LANDING TU RETIRO — PAQUETE DEFINITIVO
 
-Esta carpeta contiene una landing estática lista para publicar en un hosting como Vercel, Netlify o GitHub Pages.
+Estructura exacta para Vercel / GitHub:
 
-## Archivos
-- `index.html` — estructura completa de la landing.
-- `styles.css` — diseño responsive tipo documento largo / hoja carta.
-- `script.js` — calculadora, selección de intereses, formulario y enlaces.
-- `assets/` — fotos y logos proporcionados para el proyecto.
+index.html
+styles.css
+script.js
+README.txt
+assets/
+  allianz-distribuidor.png
+  georgina-perfil.jpg
+  hero-couple-generated.jpg
+  logo-cnsf.png
+  logo-condusef.png
 
-## Antes de publicar
-1. En `script.js`, agrega el número real de WhatsApp en `CONFIG.whatsapp`.
-2. En `index.html`, reemplaza los datos del footer por dirección, teléfono e Instagram reales.
-3. Sustituye el bloque de video por el video final de Georgina.
-4. Reemplaza los textos de testimonios por testimonios reales autorizados.
-5. Revisa los textos legales y fiscales con la documentación vigente del producto antes de lanzar campañas pagadas.
-6. Si quieres capturar leads automáticamente, conecta el formulario a tu CRM/Google Sheets/Formspree/endpoint propio.
+IMPORTANTE:
+- index.html debe permanecer en la raíz del repositorio.
+- styles.css y script.js deben permanecer en la raíz.
+- La carpeta debe llamarse exactamente assets.
+- No cambiar mayúsculas, minúsculas ni nombres de archivos.
+- No hay carpetas anidadas dentro del ZIP.
 
-## Calendly
-El botón ya está conectado a:
-https://calendly.com/georgina-inviertemas/fondosindexados
+CALCULADORA:
+- Rendimiento nominal ilustrativo: 10% anual.
+- Capitalización mensual.
+- Inflación ilustrativa: 4% anual.
+- El ingreso deseado de retiro se ajusta por la inflación para calcular la meta patrimonial de referencia.
+- El beneficio fiscal mostrado usa 20% de las aportaciones anuales únicamente como referencia educativa; no es una garantía.
 
-## Publicación rápida
-### Vercel
-- Crea una cuenta.
-- Importa este proyecto/carpeta.
-- Selecciona despliegue estático.
-- Publica.
-- Después conecta tu dominio.
-
-### Netlify
-- Entra a Netlify.
-- Arrastra la carpeta del proyecto al área de despliegue.
-- Netlify publicará la landing.
-- Después conecta tu dominio.
-
-No se requiere WordPress para esta versión.
+Este sitio es una proyección ilustrativa y no constituye una promesa de rendimiento ni asesoría fiscal personalizada.
