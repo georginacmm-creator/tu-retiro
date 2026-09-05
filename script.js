@@ -72,6 +72,15 @@ document.querySelectorAll("#taxChoices .choice").forEach((btn) => {
 // El botón verde lleva al formulario de agenda.
 $("calculate")?.addEventListener("click", () => {
   calculate();
+
+  // Lleva al formulario el ahorro mensual que el prospecto indicó en la calculadora.
+  // El campo queda editable para que pueda ajustarlo antes de enviar sus datos.
+  const savingsField = document.querySelector('#leadForm input[name="savings"]');
+  const monthlyField = $("monthly");
+  if (savingsField && monthlyField) {
+    savingsField.value = monthlyField.value || "";
+  }
+
   const leadSection = $("leadSection");
   if (leadSection) {
     leadSection.scrollIntoView({ behavior: "smooth", block: "start" });
