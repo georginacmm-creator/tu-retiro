@@ -64,23 +64,9 @@
             <label>¿Cuál es tu ingreso mensual actual?
               <div class="money-input"><span>$</span><input id="income" type="number" min="0" step="1000" value="100000"></div>
             </label>
-            <label>¿Cuánto tienes destinado actualmente para tu retiro? <small>(opcional)</small>
-              <div class="money-input"><span>$</span><input id="currentSavings" type="number" min="0" step="5000" value="500000"></div>
-            </label>
             <label>¿Cuánto podrías invertir cada mes?
               <div class="money-input"><span>$</span><input id="monthly" type="number" min="500" step="500" value="15000"></div>
             </label>
-            <label>¿Cuánto te gustaría recibir al mes durante tu retiro?
-              <div class="money-input"><span>$</span><input id="retirementIncome" type="number" min="5000" step="5000" value="70000"></div>
-            </label>
-
-            <div class="field-label">¿Qué te interesa principalmente?</div>
-            <div class="choice-grid" id="interestChoices">
-              <button type="button" class="choice active" data-value="patrimonio">Construir patrimonio</button>
-              <button type="button" class="choice" data-value="fiscal">Aprovechar beneficios fiscales</button>
-              <button type="button" class="choice" data-value="ambas">Ambas</button>
-            </div>
-
             <div class="tax-choice">
               <div class="field-label">Deducción de impuestos <span>¿Sí o no?</span></div>
               <p>Si facturas ante el SAT, podrías tener un beneficio fiscal, según tu ISR y las condiciones aplicables.</p>
@@ -129,10 +115,6 @@
               </div>
             </div>
 
-            <div class="goal-box">
-              <div><span>Meta patrimonial de referencia</span><strong id="targetValue">$60,550,740</strong><small>Con base en tu ingreso mensual, ajustado por una inflación ilustrativa de 4% anual, y una referencia de 4% anual.</small></div>
-              <div><span>Brecha estimada</span><strong id="gapValue">$28,508,111</strong><small id="gapLabel">Lo que faltaría para alcanzar esa referencia.</small></div>
-            </div>
             <p class="disclaimer">* Proyección ilustrativa con supuesto de 10% anual nominal, inflación de 4% anual y capitalización mensual. El beneficio fiscal mostrado usa 20% únicamente como referencia educativa; no es una garantía ni sustituye el cálculo fiscal de tu situación particular. La aplicación de beneficios depende de la legislación vigente, del producto contratado y de las circunstancias del contribuyente.</p>
           </div>
         </div>
