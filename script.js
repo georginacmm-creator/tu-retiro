@@ -23,9 +23,6 @@ function calculate(){
   const fiscalBenefit = fiscalEnabled ? monthly * 12 * 0.20 : 0;
 
   $("futureValue").textContent = money(futureValue);
-  $("cardMonthly").textContent = `${money(monthly)} MXN`;
-  $("cardContrib").textContent = `${money(totalContrib)} MXN`;
-  $("cardGrowth") && ($("cardGrowth").textContent = `${money(growth)} MXN`);
   $("summaryYears").textContent = `${retireAge-age} años`;
   $("summaryAge").textContent = `${retireAge} años`;
   $("summaryContrib").textContent = money(totalContrib);
