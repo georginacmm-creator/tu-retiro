@@ -22,8 +22,7 @@ button,input{font:inherit}
 .page{padding:100px 0}
 .topbar{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
 .nav{height:68px;display:flex;align-items:center;justify-content:space-between}
-.brand{font-weight:700;letter-spacing:.12em;color:var(--blue)}
-.brand span{font-weight:400}
+.brand-wrap{display:flex;align-items:center;gap:18px}.header-logo{width:170px;height:42px;object-fit:contain}.brand-name{font-weight:700;letter-spacing:.12em;color:var(--blue);font-size:13px;padding-left:18px;border-left:1px solid var(--line)}
 .brand-light{color:#fff}
 .mini-cta{font-size:13px;font-weight:700;color:var(--blue)}
 .hero{padding-top:72px;padding-bottom:110px}
@@ -151,6 +150,7 @@ h3{font-size:24px;color:var(--blue)}
 @media(max-width:620px){
   .page{padding:72px 0}
   .nav{height:60px}
+  .header-logo{width:145px;height:38px}.brand-name{display:none}
   .mini-cta{font-size:11px}
   h1{font-size:50px}.hero{padding-top:45px}
   .hero-photo-wrap img{height:430px}
