@@ -38,3 +38,4 @@ No se requiere WordPress para esta versión.
 
 
 Versión corregida: proyección ilustrativa con 10% anual nominal e inflación de 4%. El resultado también muestra una referencia expresada en pesos de hoy.
+“Actualización de la landing.”
