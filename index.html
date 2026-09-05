@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Planea tu retiro con una proyección personalizada y conoce alternativas de ahorro e inversión con asesoría de Georgina.">
+  <title>Tu Retiro | Planea hoy. Vive mañana.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a href="#top" class="nav-logo"><img src="assets/allianz-distribuidor.png" alt="Distribuidor Autorizado Allianz"></a>
+      <a class="mini-cta" href="#calculadora">Calcula tu retiro</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero page">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <div class="optima-brand"><span>OptiMaxx</span> <b>plus</b><small>Tu futuro empieza hoy</small></div>
+          <p class="eyebrow">PLANEACIÓN PATRIMONIAL</p>
+          <h1>Planea hoy.<br><em>Vive mañana.</em></h1>
+          <p class="lead">Descubre cuánto podrías necesitar para construir el retiro que quieres y qué estrategia puede tener sentido para ti.</p>
+          <div class="hero-actions">
+            <a class="btn btn-green" href="#calculadora">Calcula tu retiro</a>
+            <a class="text-link" href="#optima">Conoce OptiMaxx Plus →</a>
+          </div>
+          <div class="trust-row">
+            <span>✓ Asesoría personalizada</span>
+            <span>✓ Sin costo</span>
+            <span>✓ Sin compromiso</span>
+          </div>
+        </div>
+        <div class="hero-photo-wrap">
+          <img src="assets/hero-couple-generated.jpg" alt="Pareja disfrutando de su futuro juntos">
+        </div>
+      </div>
+    </section>
+
+    <section id="calculadora" class="calculator page page-blue">
+      <div class="container">
+        <div class="section-head centered">
+          <p class="eyebrow">TU ESCENARIO</p>
+          <h2>¿Cuánto necesitas para retirarte como quieres?</h2>
+          <p>Haz una primera proyección con tus propios datos. El resultado es ilustrativo y no representa un rendimiento garantizado.</p>
+        </div>
+
+        <div class="calc-shell">
+          <div class="calc-form">
+            <div class="field-row">
+              <label>¿Qué edad tienes?
+                <input id="age" type="number" min="18" max="75" value="38">
+              </label>
+              <label>¿A qué edad quieres retirarte?
+                <input id="retireAge" type="number" min="40" max="90" value="65">
+              </label>
+            </div>
+            <label>¿Cuál es tu ingreso mensual actual?
+              <div class="money-input"><span>$</span><input id="income" type="number" min="0" step="1000" value="100000"></div>
+            </label>
+            <label>¿Cuánto tienes destinado actualmente para tu retiro? <small>(opcional)</small>
+              <div class="money-input"><span>$</span><input id="currentSavings" type="number" min="0" step="5000" value="500000"></div>
+            </label>
+            <label>¿Cuánto podrías invertir cada mes?
+              <div class="money-input"><span>$</span><input id="monthly" type="number" min="500" step="500" value="15000"></div>
+            </label>
+            <label>¿Cuánto te gustaría recibir al mes durante tu retiro?
+              <div class="money-input"><span>$</span><input id="retirementIncome" type="number" min="5000" step="5000" value="70000"></div>
+            </label>
+
+            <div class="field-label">¿Qué te interesa principalmente?</div>
+            <div class="choice-grid" id="interestChoices">
+              <button type="button" class="choice active" data-value="patrimonio">Construir patrimonio</button>
+              <button type="button" class="choice" data-value="fiscal">Aprovechar beneficios fiscales</button>
+              <button type="button" class="choice" data-value="ambas">Ambas</button>
+            </div>
+
+            <div class="field-label">¿Cuándo te gustaría empezar?</div>
+            <div class="choice-grid" id="timingChoices">
+              <button type="button" class="choice active" data-value="mes">Este mes</button>
+              <button type="button" class="choice" data-value="3meses">Próximos 3 meses</button>
+              <button type="button" class="choice" data-value="año">Este año</button>
+              <button type="button" class="choice" data-value="investigando">Solo estoy investigando</button>
+            </div>
+
+            <button id="calculate" class="btn btn-green btn-full">Ver mi proyección</button>
+          </div>
+
+          <div class="calc-result">
+            <div class="result-top">
+              <span class="result-label">PATRIMONIO PROYECTADO AL RETIRO</span>
+              <strong id="futureValue">$12,098,203</strong>
+              <span class="illustrative">Proyección ilustrativa · <b id="realValue">$5,000,000</b> en pesos de hoy</span>
+            </div>
+            <div class="chart-wrap">
+              <div class="chart-meta">
+                <span>Hoy <b id="ageStart">38 años</b></span>
+                <span><b id="monthlyLabel">$15,000/mes</b></span>
+                <span>Retiro <b id="ageEnd">65 años</b></span>
+              </div>
+              <div id="barChart" class="bar-chart" aria-label="Gráfica de aportaciones y crecimiento proyectado"></div>
+              <div class="legend">
+                <span><i class="dot dot-blue"></i> Lo que tú aportas</span>
+                <span><i class="dot dot-green"></i> Crecimiento proyectado</span>
+              </div>
+            </div>
+            <div class="result-cards">
+              <div><span>Aportación mensual</span><strong id="cardMonthly">$15,000 MXN</strong></div>
+              <div><span>Total aportado</span><strong id="cardContrib">$4,860,000 MXN</strong></div>
+              <div><span>Crecimiento estimado</span><strong id="cardGrowth">$6,738,203 MXN</strong></div>
+            </div>
+            <div class="goal-box">
+              <div><span>Meta patrimonial de referencia</span><strong id="targetValue">$21,000,000</strong><small>Con base en el ingreso mensual que indicaste y una referencia ilustrativa de 4% anual.</small></div>
+              <div><span>Brecha estimada</span><strong id="gapValue">$8,901,797</strong><small id="gapLabel">Lo que faltaría para alcanzar esa referencia en pesos de hoy.</small></div>
+            </div>
+            <p class="disclaimer">* Proyección educativa con supuesto de <b>10% anual nominal</b>, capitalización mensual e <b>inflación de 4% anual</b>. Las cifras en “pesos de hoy” descuentan inflación para mostrar poder adquisitivo aproximado. La aportación mensual se mantiene constante en el cálculo. La meta usa 4% anual únicamente como referencia educativa; no es una recomendación, garantía ni promesa de rendimiento. Los resultados reales dependen de aportaciones, plazo, costos, impuestos, condiciones del producto y comportamiento de las inversiones.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="lead-section page">
+      <div class="container narrow">
+        <div class="lead-card">
+          <div>
+            <p class="eyebrow">SIGUIENTE PASO</p>
+            <h2>¿Quieres que revise tu escenario contigo?</h2>
+            <p>Déjame tus datos y agenda directamente una llamada conmigo para revisar tu objetivo, tu capacidad de aportación y las alternativas que podrían aplicar a tu situación.</p>
+          </div>
+          <form id="leadForm" class="lead-form">
+            <input name="name" required placeholder="Nombre completo">
+            <input name="whatsapp" required placeholder="WhatsApp">
+            <input name="email" type="email" required placeholder="Correo electrónico">
+            <button class="btn btn-green btn-full" type="submit">Quiero revisar mi estrategia</button>
+            <p id="formMessage" class="form-message"></p>
+          </form>
+          <a id="calendlyBtn" class="btn btn-outline btn-full" href="https://calendly.com/georgina-inviertemas/fondosindexados" target="_blank" rel="noopener">Agenda mi llamada en Calendly</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="video-section page page-soft">
+      <div class="container split">
+        <div class="video-copy">
+          <p class="eyebrow">HABLEMOS DE TU RETIRO</p>
+          <h2>No necesitas adivinar. Necesitas conocer tu escenario.</h2>
+          <p>En menos de un minuto, Georgina te explica cómo usar esta proyección y qué revisar antes de tomar una decisión.</p>
+          <div class="script-box">
+            <strong>Guion sugerido para tu video</strong>
+            <p>“Hola, soy Georgina, agente de seguros certificada. Si estás aquí, probablemente ya te preguntaste cuánto vas a necesitar realmente para retirarte. No necesitas adivinarlo. Podemos revisar tu escenario, tu objetivo y cuánto podrías destinar hoy para construir ese patrimonio. Si además te interesan los beneficios fiscales, podemos revisar qué alternativas podrían aplicar a tu situación. Llena el formulario y yo personalmente revisaré tus datos contigo.”</p>
+          </div>
+        </div>
+        <div class="video-placeholder">
+          <span>VIDEO DE GEORGINA</span>
+          <p>45–60 segundos</p>
+          <div class="play">▶</div>
+          <small>Reemplazar este bloque por tu video final.</small>
+        </div>
+      </div>
+    </section>
+
+    <section id="optima" class="product-section page">
+      <div class="container product-card">
+        <div class="product-image"><div class="mountain-art"></div></div>
+        <div class="product-copy">
+          <p class="eyebrow">LA ESTRATEGIA</p>
+          <h2>Construye tu patrimonio para el retiro</h2>
+          <h3>OptiMaxx Plus de Allianz</h3>
+          <p>Un plan de ahorro individual diseñado para ayudarte a construir un patrimonio a largo plazo mediante aportaciones programadas y diferentes alternativas de inversión.</p>
+          <div class="features">
+            <div><b>Inversión</b><span>Alternativas para diversificar tu estrategia.</span></div>
+            <div><b>Flexibilidad</b><span>Aportaciones que pueden adaptarse a tus posibilidades.</span></div>
+            <div><b>Beneficios fiscales</b><span>Tratamiento fiscal según la modalidad contratada y tu situación.</span></div>
+            <div><b>Respaldo Allianz</b><span>Experiencia internacional en servicios financieros y de seguros.</span></div>
+          </div>
+          <a class="btn btn-green" href="#contacto">Quiero conocer mi opción</a>
+          <small class="legal-note">Las características, beneficios, disponibilidad y tratamiento fiscal dependen de las condiciones del plan y de la situación particular del contratante.</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="trust page page-blue">
+      <div class="container centered">
+        <p class="eyebrow">RESPALDO Y REGULACIÓN</p>
+        <h2>Una decisión importante merece información clara.</h2>
+        <div class="logos">
+          <div class="logo-card"><img src="assets/allianz-distribuidor.png" alt="Distribuidor Autorizado Allianz"><p>Distribuidor Autorizado Allianz</p></div>
+          <div class="logo-card"><img src="assets/logo-condusef.png" alt="CONDUSEF"><p>Protege y orienta a los usuarios de servicios financieros.</p></div>
+          <div class="logo-card"><img src="assets/logo-cnsf.png" alt="CNSF"><p>Supervisa y regula al sector asegurador y afianzador.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tax page">
+      <div class="container">
+        <div class="section-head centered">
+          <p class="eyebrow">BENEFICIOS FISCALES</p>
+          <h2>El retiro también se planea desde la parte fiscal.</h2>
+          <p>Existen distintas modalidades y tratamientos fiscales. Revisemos cuál puede tener sentido para ti.</p>
+        </div>
+        <div class="tax-grid">
+          <article><span>ART. 151</span><h3>Plan Personal de Retiro</h3><p>Puede contemplar beneficios fiscales conforme a la legislación aplicable y condiciones del plan.</p></article>
+          <article><span>ART. 93</span><h3>Retiro / supervivencia</h3><p>Tratamiento fiscal sujeto a la modalidad contratada, condiciones y requisitos aplicables.</p></article>
+          <article><span>ART. 185</span><h3>Estímulo fiscal</h3><p>Otra alternativa que puede formar parte de una estrategia integral de ahorro para el retiro.</p></article>
+        </div>
+        <p class="tax-note">La información fiscal es general y no constituye asesoría fiscal. La aplicación de beneficios depende de la legislación vigente, del producto contratado y de las circunstancias particulares del contribuyente.</p>
+      </div>
+    </section>
+
+    <section class="testimonials page page-soft">
+      <div class="container">
+        <div class="section-head centered">
+          <p class="eyebrow">EXPERIENCIAS</p>
+          <h2>Lo que dicen mis clientes</h2>
+          <p class="muted">Esta sección está lista para colocar testimonios reales autorizados.</p>
+        </div>
+        <div class="testimonial-grid">
+          <article><div class="quote">“</div><p>Testimonio real pendiente de agregar.</p><span>— Cliente, con autorización</span></article>
+          <article><div class="quote">“</div><p>Testimonio real pendiente de agregar.</p><span>— Cliente, con autorización</span></article>
+          <article><div class="quote">“</div><p>Testimonio real pendiente de agregar.</p><span>— Cliente, con autorización</span></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="about page">
+      <div class="container split about-grid">
+        <img class="profile-photo" src="assets/georgina-perfil.jpg" alt="Georgina, agente de seguros certificada">
+        <div>
+          <p class="eyebrow">SOBRE GEORGINA</p>
+          <h2>Tu estrategia no debería sentirse como una venta.</h2>
+          <p>Soy Georgina, agente de seguros certificada. Mi objetivo es ayudarte a entender cuánto necesitas, qué estás construyendo y qué alternativas pueden alinearse con tus metas.</p>
+          <p>Primero conocemos tu escenario. Después revisamos opciones. Y solo entonces tomamos una decisión.</p>
+          <a class="btn btn-green" href="#contacto">Quiero hablar contigo</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq page page-soft">
+      <div class="container narrow">
+        <div class="section-head centered">
+          <p class="eyebrow">PREGUNTAS FRECUENTES</p>
+          <h2>Antes de tomar una decisión</h2>
+        </div>
+        <details><summary>¿Qué es un PPR?</summary><p>Es un esquema de ahorro para el retiro que puede ofrecer beneficios fiscales bajo determinadas condiciones. La modalidad y requisitos deben revisarse en cada caso.</p></details>
+        <details><summary>¿Qué es OptiMaxx Plus?</summary><p>Es un plan de ahorro individual con aportaciones programadas y alternativas de inversión. Sus características dependen de las condiciones contratadas.</p></details>
+        <details><summary>¿Cuánto debería aportar?</summary><p>No existe una cantidad universal. Depende de tu edad, horizonte, objetivo, flujo disponible y estrategia integral.</p></details>
+        <details><summary>¿Puedo aprovechar beneficios fiscales?</summary><p>Puede ser posible según la modalidad del plan, legislación vigente y tu situación fiscal. En una llamada podemos identificar qué revisar.</p></details>
+        <details><summary>¿Qué pasa si mis ingresos cambian?</summary><p>La estrategia puede revisarse con el tiempo. Las modificaciones y opciones disponibles dependen de las condiciones del contrato.</p></details>
+        <details><summary>¿Cuándo puedo disponer del dinero?</summary><p>Las opciones de liquidez, retiros o préstamos están sujetas a las condiciones del plan y pueden tener implicaciones fiscales.</p></details>
+        <details><summary>¿La asesoría tiene costo?</summary><p>La primera revisión de tu escenario es sin costo y sin compromiso de contratación.</p></details>
+        <details><summary>¿Qué pasa después de llenar el formulario?</summary><p>Recibirás la opción de agendar una llamada. Revisaremos tus objetivos y, si tiene sentido, te presentaré una propuesta personalizada.</p></details>
+      </div>
+    </section>
+
+    <section id="contacto" class="final-cta page">
+      <div class="container final-card">
+        <p class="eyebrow">TU SIGUIENTE PASO</p>
+        <h2>Ya conoces tu número.<br><em>Ahora construyamos tu estrategia.</em></h2>
+        <p>Elige cómo quieres continuar.</p>
+        <div class="final-actions">
+          <a class="btn btn-green" href="https://calendly.com/georgina-inviertemas/fondosindexados" target="_blank" rel="noopener">Agenda una llamada conmigo</a>
+          <a class="btn btn-green" href="#" id="whatsappLink">Escríbeme por WhatsApp</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer page">
+    <div class="container footer-grid">
+      <div><div class="brand brand-light">TU <span>RETIRO</span></div><p>Planea hoy. Vive mañana.</p></div>
+      <div><img src="assets/allianz-distribuidor.png" class="footer-logo" alt="Distribuidor Autorizado Allianz"></div>
+      <div><strong>Contacto</strong><p>Correo: georgina@fondosindexados.com.mx</p><p>WhatsApp: 55 7244 9150</p><p><a href="https://www.instagram.com/georgina.turetiro/" target="_blank" rel="noopener">Instagram: @georgina.turetiro</a></p><p>Agenda: Calendly</p></div>
+    </div>
+    <div class="container footer-bottom">© <span id="year"></span> Tu Retiro · Información general sujeta a condiciones del producto y legislación vigente.</div>
+  </footer>
+
+  <a class="floating-wa" id="floatingWhatsApp" href="#" aria-label="WhatsApp">WA</a>
+  <script src="script.js"></script>
+</body>
+</html>
