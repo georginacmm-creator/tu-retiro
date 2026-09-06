@@ -318,16 +318,26 @@ if (leadForm) {
     );
   });
 }
+// Botones de WhatsApp
+const whatsappUrl = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(
+  "Hola Georgina, quiero hablar sobre mi retiro."
+)}`;
 
-// Botón de WhatsApp
-const whatsappLink = document.querySelector(
-  'a[href*="wa.me"], a[href*="whatsapp"]'
-);
+const whatsappLinks = [
+  document.getElementById("whatsappLink"),
+  document.getElementById("floatingWhatsApp")
+].filter(Boolean);
 
-if (whatsappLink) {
-  whatsappLink.href =
-    `https://wa.me/${CONFIG.whatsapp}`;
-}
+whatsappLinks.forEach((link) => {
+  link.href = whatsappUrl;
+  link.target = "_blank";
+  link.rel = "noopener";
+
+  link.addEventListener("click", (event) => {
+    event.preventDefault();
+    window.open(whatsappUrl, "_blank", "noopener");
+  });
+});
 
 // Ejecutar cálculo al cargar
 calculate();
