@@ -2,117 +2,332 @@ const CONFIG = {
   annualRate: 0.10,
   annualInflation: 0.04,
   calendly: "https://calendly.com/georgina-inviertemas/fondosindexados",
-  whatsapp: "525572449150"
+  whatsapp: "525572449150",
+  googleSheetsUrl: "https://script.google.com/macros/s/AKfycbxfPqfnSDF2Kl8dkdRHWn0QM9WPrvuC15mITAY4sdwJkmQr-jZ8hQd7rknMsfd1woqy8w/exec"
 };
 
 const $ = (id) => document.getElementById(id);
-const money = (n) => new Intl.NumberFormat("es-MX", {style:"currency", currency:"MXN", maximumFractionDigits:0}).format(Math.round(n));
 
-function calculate(){
-  const age = Math.max(18, Number($("age").value)||38);
-  const retireAge = Math.max(age+1, Number($("retireAge").value)||65);
-  const monthly = Math.max(0, Number($("monthly").value)||0);
-  const months = (retireAge-age)*12;
-  const r = CONFIG.annualRate/12;
+const money = (n) =>
+  new Intl.NumberFormat("es-MX", {
+    style: "currency",
+    currency: "MXN",
+    maximumFractionDigits: 0
+  }).format(Math.round(n));
 
-  const futureContrib = r === 0 ? monthly*months : monthly*((Math.pow(1+r,months)-1)/r);
+function calculate() {
+  const age = Math.max(18, Number($("age")?.value || 38));
+  const retireAge = Math.max(
+    age + 1,
+    Number($("retireAge")?.value || 65)
+  );
+
+  const monthly = Math.max(
+    0,
+    Number($("monthly")?.value || 0)
+  );
+
+  const months = (retireAge - age) * 12;
+  const r = CONFIG.annualRate / 12;
+
+  const futureContrib =
+    r === 0
+      ? monthly * months
+      : monthly * ((Math.pow(1 + r, months) - 1) / r);
+
   const futureValue = futureContrib;
-  const totalContrib = monthly*months;
-  const growth = Math.max(0, futureValue-totalContrib);
-  const fiscalEnabled = document.querySelector("#taxChoices .choice.active")?.dataset.value !== "no";
-  const fiscalBenefit = fiscalEnabled ? monthly * 12 * 0.20 : 0;
+  const totalContrib = monthly * months;
+  const growth = Math.max(0, futureValue - totalContrib);
 
-  $("futureValue").textContent = money(futureValue);
-  $("summaryYears").textContent = `${retireAge-age} años`;
-  $("summaryAge").textContent = `${retireAge} años`;
-  $("summaryContrib").textContent = money(totalContrib);
-  $("summaryGrowth").textContent = money(growth);
-  $("fiscalValue").textContent = money(fiscalBenefit);
+  const fiscalEnabled =
+    document.querySelector("#taxChoices .choice.active")?.dataset.value !== "no";
+
+  const fiscalBenefit = fiscalEnabled
+    ? monthly * 12 * 0.20
+    : 0;
+
+  // Resultado
+  if ($("summaryYears")) {
+    $("summaryYears").textContent = `${retireAge - age} años`;
+  }
+
+  if ($("summaryAge")) {
+    $("summaryAge").textContent = `${retireAge} años`;
+  }
+
+  if ($("summaryContrib")) {
+    $("summaryContrib").textContent = money(totalContrib);
+  }
+
+  if ($("summaryGrowth")) {
+    $("summaryGrowth").textContent = money(growth);
+  }
+
+  if ($("futureValue")) {
+    $("futureValue").textContent = money(futureValue);
+  }
+
+  if ($("fiscalValue")) {
+    $("fiscalValue").textContent = money(fiscalBenefit);
+  }
+
+  // Gráfica simple
   renderSimpleProgress(totalContrib, growth);
-  updateLeadPreview(age, retireAge, monthly);
+
+  // Escenario del formulario
+  if ($("leadScenarioValue")) {
+    $("leadScenarioValue").textContent =
+      `${age} años → ${retireAge} años`;
+  }
+
+  if ($("leadMonthlyValue")) {
+    $("leadMonthlyValue").textContent = money(monthly);
+  }
+
+  // Llenar automáticamente el ahorro mensual
+  const savingsInput = document.querySelector(
+    '#leadForm input[name="savings"]'
+  );
+
+  if (
+    savingsInput &&
+    !savingsInput.dataset.userEdited
+  ) {
+    savingsInput.value = monthly || "";
+  }
 }
 
-function renderSimpleProgress(contrib, growth){
-  const total = Math.max(1, contrib + growth);
-  $("contribBar").style.width = `${(contrib/total)*100}%`;
-  $("growthBar").style.width = `${(growth/total)*100}%`;
+function renderSimpleProgress(contrib, growth) {
+  const contribBar = $("contribBar");
+  const growthBar = $("growthBar");
+
+  const contribValue = $("contribLegendValue");
+  const growthValue = $("growthLegendValue");
+
+  const total = contrib + growth;
+
+  if (!total) {
+    if (contribBar) {
+      contribBar.style.width = "0%";
+      contribBar.style.flexBasis = "0%";
+    }
+
+    if (growthBar) {
+      growthBar.style.width = "0%";
+      growthBar.style.flexBasis = "0%";
+    }
+
+    return;
+  }
+
+  const contribPercent = (contrib / total) * 100;
+  const growthPercent = (growth / total) * 100;
+
+  if (contribBar) {
+    contribBar.style.width = `${contribPercent}%`;
+    contribBar.style.flexBasis = `${contribPercent}%`;
+  }
+
+  if (growthBar) {
+    growthBar.style.width = `${growthPercent}%`;
+    growthBar.style.flexBasis = `${growthPercent}%`;
+  }
+
+  if (contribValue) {
+    contribValue.textContent = money(contrib);
+  }
+
+  if (growthValue) {
+    growthValue.textContent = money(growth);
+  }
 }
 
-function updateLeadPreview(age, retireAge, monthly){
-  if ($("leadScenarioValue")) $("leadScenarioValue").textContent = `${age} → ${retireAge} años`;
-  if ($("leadMonthlyValue")) $("leadMonthlyValue").textContent = money(monthly);
-  const savings = document.querySelector('#leadForm input[name="savings"]');
-  if (savings && !savings.dataset.userEdited) savings.value = monthly || "";
-}
+// Recalcular cuando cambien los datos
+["age", "retireAge", "income", "monthly"].forEach((id) => {
+  const input = $(id);
 
-function activateChoices(groupId){
-  document.querySelectorAll(`#${groupId} .choice`).forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-      document.querySelectorAll(`#${groupId} .choice`).forEach(b=>b.classList.remove("active"));
-      btn.classList.add("active");
-      calculate();
-    });
+  if (input) {
+    input.addEventListener("input", calculate);
+    input.addEventListener("change", calculate);
+  }
+});
+
+// Deducción fiscal Sí / No
+document.querySelectorAll("#taxChoices .choice").forEach((choice) => {
+  choice.addEventListener("click", () => {
+    document
+      .querySelectorAll("#taxChoices .choice")
+      .forEach((item) => item.classList.remove("active"));
+
+    choice.classList.add("active");
+    calculate();
+  });
+});
+
+// Botón CALCULA TU RETIRO
+const calculateButton =
+  document.querySelector("#calculateBtn") ||
+  document.querySelector('[type="button"].btn-green');
+
+if (calculateButton) {
+  calculateButton.addEventListener("click", () => {
+    calculate();
+
+    const leadSection = $("leadSection");
+
+    if (leadSection) {
+      leadSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+
+    setTimeout(() => {
+      const nameInput =
+        document.querySelector('#leadForm input[name="name"]');
+
+      if (nameInput) {
+        nameInput.focus();
+      }
+    }, 700);
   });
 }
 
-$("calculate").addEventListener("click", () => {
-  calculate();
-  const leadSection = $("leadSection");
-  if (leadSection) {
-    leadSection.scrollIntoView({ behavior: "smooth", block: "start" });
-    setTimeout(() => $("leadForm")?.querySelector('input[name="name"]')?.focus(), 550);
-  }
-});
+// Si la persona modifica manualmente el ahorro,
+// ya no lo reemplazamos con el valor de la calculadora
+const savingsInput = document.querySelector(
+  '#leadForm input[name="savings"]'
+);
 
-["age","retireAge","income","monthly"].forEach(id => $(id).addEventListener("input", calculate));
-$("leadForm")?.querySelector('input[name="savings"]')?.addEventListener("input", (e)=> e.target.dataset.userEdited="true");
-activateChoices("taxChoices");
-
-$("leadForm").addEventListener("submit",(e)=>{
-  e.preventDefault();
-  const form = new FormData(e.currentTarget);
-  const name = String(form.get("name") || "").trim();
-  const email = String(form.get("email") || "").trim();
-  const lead = {
-    name,
-    whatsapp: String(form.get("whatsapp") || "").trim(),
-    email,
-    savings: String(form.get("savings") || "").trim(),
-    profession: String(form.get("profession") || "").trim(),
-    age: Number($("age").value)||0,
-    retireAge: Number($("retireAge").value)||0,
-    monthly: Number($("monthly").value)||0,
-    futureValue: $("futureValue")?.textContent || "",
-    fiscalBenefit: $("fiscalValue")?.textContent || "",
-    createdAt: new Date().toISOString()
-  };
-  try { localStorage.setItem("tuRetiroLeadDraft", JSON.stringify(lead)); } catch (_) {}
-
-  $("formMessage").textContent = "¡Listo! Tus datos quedaron preparados. Ahora elige día y hora para hablar conmigo.";
-  const url = new URL(CONFIG.calendly);
-  if (name) url.searchParams.set("name", name);
-  if (email) url.searchParams.set("email", email);
-  url.searchParams.set("utm_source", "tu_retiro_landing");
-  url.searchParams.set("utm_medium", "lead_form");
-  url.searchParams.set("utm_campaign", "retiro");
-  const calendly = $("calendlyBtn");
-  calendly.href = url.toString();
-  setTimeout(() => window.open(url.toString(), "_blank", "noopener"), 350);
-});
-
-document.querySelectorAll('a[href="#"]').forEach(a=>{
-  if(a.id !== "whatsappLink" && a.id !== "floatingWhatsApp") a.addEventListener("click",e=>e.preventDefault());
-});
-
-function setWhatsApp(){
-  const number = CONFIG.whatsapp.replace(/\D/g,"");
-  const links = [$('whatsappLink'), $('floatingWhatsApp')].filter(Boolean);
-  const text = "Hola Georgina, quiero hablar sobre mi retiro.";
-  if(number){
-    const url = `https://wa.me/${number}?text=${encodeURIComponent(text)}`;
-    links.forEach(a=>a.href=url);
-  }
+if (savingsInput) {
+  savingsInput.addEventListener("input", () => {
+    savingsInput.dataset.userEdited = "true";
+  });
 }
-setWhatsApp();
-if ($("year")) $("year").textContent = new Date().getFullYear();
+
+// Formulario de prospectos
+const leadForm = $("leadForm");
+
+if (leadForm) {
+  leadForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    calculate();
+
+    const formData = new FormData(leadForm);
+
+    const age = Number($("age")?.value || 0);
+    const retireAge = Number($("retireAge")?.value || 0);
+    const monthly = Number($("monthly")?.value || 0);
+
+    const months = Math.max(0, (retireAge - age) * 12);
+    const r = CONFIG.annualRate / 12;
+
+    const futureValue =
+      r === 0
+        ? monthly * months
+        : monthly * ((Math.pow(1 + r, months) - 1) / r);
+
+    const totalContrib = monthly * months;
+    const growth = Math.max(0, futureValue - totalContrib);
+
+    const fiscalEnabled =
+      document.querySelector("#taxChoices .choice.active")?.dataset.value !== "no";
+
+    const fiscalBenefit = fiscalEnabled
+      ? monthly * 12 * 0.20
+      : 0;
+
+    const lead = {
+      name: formData.get("name") || "",
+      whatsapp: formData.get("whatsapp") || "",
+      email: formData.get("email") || "",
+      savings: formData.get("savings") || "",
+      profession: formData.get("profession") || "",
+      age: age,
+      retireAge: retireAge,
+      years: Math.max(0, retireAge - age),
+      totalContrib: totalContrib,
+      growth: growth,
+      futureValue: futureValue,
+      fiscalBenefit: fiscalBenefit
+    };
+
+    // Guardar una copia local
+    try {
+      localStorage.setItem(
+        "tuRetiroLeadDraft",
+        JSON.stringify(lead)
+      );
+    } catch (error) {
+      console.log("No se pudo guardar copia local", error);
+    }
+
+    const message = $("formMessage");
+
+    if (message) {
+      message.textContent =
+        "Perfecto. Tus datos fueron enviados. Ahora podrás elegir fecha y hora para hablar conmigo.";
+    }
+
+    // Enviar prospecto a Google Sheets
+    try {
+      await fetch(CONFIG.googleSheetsUrl, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify(lead)
+      });
+    } catch (error) {
+      console.log("No se pudo enviar a Google Sheets", error);
+    }
+
+    // Preparar Calendly
+    const calendlyUrl = new URL(CONFIG.calendly);
+
+    if (lead.name) {
+      calendlyUrl.searchParams.set("name", lead.name);
+    }
+
+    if (lead.email) {
+      calendlyUrl.searchParams.set("email", lead.email);
+    }
+
+    calendlyUrl.searchParams.set(
+      "utm_source",
+      "tu_retiro_landing"
+    );
+
+    calendlyUrl.searchParams.set(
+      "utm_medium",
+      "lead_form"
+    );
+
+    calendlyUrl.searchParams.set(
+      "utm_campaign",
+      "retiro"
+    );
+
+    // Abrir Calendly
+    window.open(
+      calendlyUrl.toString(),
+      "_blank",
+      "noopener"
+    );
+  });
+}
+
+// Botón de WhatsApp
+const whatsappLink = document.querySelector(
+  'a[href*="wa.me"], a[href*="whatsapp"]'
+);
+
+if (whatsappLink) {
+  whatsappLink.href =
+    `https://wa.me/${CONFIG.whatsapp}`;
+}
+
+// Ejecutar cálculo al cargar
 calculate();
