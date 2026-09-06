@@ -165,12 +165,13 @@ document.querySelectorAll("#taxChoices .choice").forEach((choice) => {
 });
 
 // Botón CALCULA TU RETIRO
-const calculateButton =
-  document.querySelector("#calculateBtn") ||
-  document.querySelector('[type="button"].btn-green');
+const calculateButton = Array.from(document.querySelectorAll("button, a"))
+  .find(el => el.textContent.trim().includes("CALCULA TU RETIRO"));
 
 if (calculateButton) {
-  calculateButton.addEventListener("click", () => {
+  calculateButton.addEventListener("click", (event) => {
+    event.preventDefault();
+
     calculate();
 
     const leadSection = $("leadSection");
@@ -183,8 +184,7 @@ if (calculateButton) {
     }
 
     setTimeout(() => {
-      const nameInput =
-        document.querySelector('#leadForm input[name="name"]');
+      const nameInput = document.querySelector('#leadForm input[name="name"]');
 
       if (nameInput) {
         nameInput.focus();
