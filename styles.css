@@ -170,3 +170,13 @@ h3{font-size:24px;color:var(--blue)}
   .progress-legend{flex-direction:column;gap:5px}
   .footer-grid{grid-template-columns:1fr}
 }
+/* Separación entre números y títulos */
+.testimonial-grid article .quote {
+  display: block;
+  margin-bottom: 12px;
+  line-height: 1;
+}
+
+.testimonial-grid article h3 {
+  margin-top: 0;
+}
