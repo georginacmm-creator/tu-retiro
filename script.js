@@ -174,22 +174,14 @@ if (calculateButton) {
 
     calculate();
 
-    const leadSection = $("leadSection");
+    const resultSection = document.querySelector(".calc-result");
 
-    if (leadSection) {
-      leadSection.scrollIntoView({
+    if (resultSection) {
+      resultSection.scrollIntoView({
         behavior: "smooth",
         block: "start"
       });
     }
-
-    setTimeout(() => {
-      const nameInput = document.querySelector('#leadForm input[name="name"]');
-
-      if (nameInput) {
-        nameInput.focus();
-      }
-    }, 700);
   });
 }
 
