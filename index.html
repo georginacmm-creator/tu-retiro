@@ -51,33 +51,33 @@
           <p>Haz una primera proyección con tus propios datos. El resultado es ilustrativo y no representa un rendimiento garantizado.</p>
         </div>
 
-        <div class="calc-shell">
-          <div class="calc-form">
-            <div class="field-row">
-              <label>¿Qué edad tienes?
-                <input id="age" type="number" min="18" max="75" value="38">
-              </label>
-              <label>¿A qué edad quieres retirarte?
-                <input id="retireAge" type="number" min="40" max="90" value="65">
-              </label>
-            </div>
-            <label>¿Cuál es tu ingreso mensual actual?
-              <div class="money-input"><span>$</span><input id="income" type="number" min="0" step="1000" value="100000"></div>
-            </label>
-            <label>¿Cuánto podrías invertir cada mes?
-              <div class="money-input"><span>$</span><input id="monthly" type="number" min="500" step="500" value="15000"></div>
-            </label>
-            <div class="tax-choice">
-              <div class="field-label">Deducción de impuestos <span>¿Sí o no?</span></div>
-              <p>Si facturas ante el SAT, podrías tener un beneficio fiscal, según tu ISR y las condiciones aplicables.</p>
-              <div class="choice-grid" id="taxChoices">
-                <button type="button" class="choice active" data-value="si">Sí</button>
-                <button type="button" class="choice" data-value="no">No</button>
-              </div>
-            </div>
+      <div class="calc-shell">
+  <div class="calc-form">
+    <div class="field-row">
+      <label>¿Qué edad tienes?
+        <input id="age" type="number" min="18" max="75">
+      </label>
+      <label>¿A qué edad quieres retirarte?
+        <input id="retireAge" type="number" min="40" max="90">
+      </label>
+    </div>
+    <label>¿Cuál es tu ingreso mensual actual?
+      <div class="money-input"><span>$</span><input id="income" type="number" min="0" step="1000"></div>
+    </label>
+    <label>¿Cuánto podrías invertir cada mes?
+      <div class="money-input"><span>$</span><input id="monthly" type="number" min="500" step="500" value="2500"></div>
+    </label>
+    <div class="tax-choice">
+      <div class="field-label">Deducción de impuestos <span>¿Sí o no?</span></div>
+      <p>Si facturas ante el SAT, podrías tener un beneficio fiscal, según tu ISR y las condiciones aplicables.</p>
+      <div class="choice-grid" id="taxChoices">
+        <button type="button" class="choice active" data-value="si">Sí</button>
+        <button type="button" class="choice" data-value="no">No</button>
+      </div>
+    </div>
 
-            <button id="calculate" class="btn btn-green btn-full">CALCULA TU RETIRO</button>
-          </div>
+    <button id="calculate" class="btn btn-green btn-full">CALCULA TU RETIRO</button>
+  </div>
 
           <div class="calc-result">
             <div class="result-top">
