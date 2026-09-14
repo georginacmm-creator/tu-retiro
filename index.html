@@ -99,13 +99,15 @@
               <small>Proyección ilustrativa. Total de tus aportaciones más crecimiento estimado.</small>
             </div>
 
-            <div class="simple-progress" aria-label="Aportaciones y crecimiento proyectado">
-              <div class="progress-track"><span id="contribBar"></span><span id="growthBar"></span></div>
-              <div class="progress-legend">
-                <span><i class="dot dot-blue"></i> Lo que tú aportas</span>
-                <span><i class="dot dot-green"></i> Crecimiento estimado</span>
-              </div>
-            </div>
+         <div class="projection-download">
+  <div>
+    <strong>Descarga tu proyección</strong>
+    <p>Guarda un resumen personalizado de tu escenario de retiro en PDF.</p>
+  </div>
+  <button id="downloadProjection" class="btn btn-green">
+    DESCARGAR MI PROYECCIÓN
+  </button>
+</div>
 
             <div class="fiscal-result" id="fiscalResult">
               <div>
@@ -346,7 +348,7 @@
     </p>
   </div>
 </footer>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
   <script src="script.js" defer></script>
 </body>
 </html>
