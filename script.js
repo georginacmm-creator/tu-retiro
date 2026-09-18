@@ -97,6 +97,7 @@ function calculate() {
     savingsInput.value = monthly || "";
   }
 }
+
 const downloadProjection = document.getElementById("downloadProjection");
 
 if (downloadProjection) {
@@ -109,8 +110,18 @@ if (downloadProjection) {
     const { jsPDF } = window.jspdf;
 
     const age = Math.max(18, Number($("age")?.value || 38));
-    const retireAge = Math.max(age + 1, Number($("retireAge")?.value || 65));
-    const monthly = Math.max(0, Number($("monthly")?.value || 0));
+    const retireAge = Math.max(
+      age + 1,
+      Number($("retireAge")?.value || 65)
+    );
+    const monthly = Math.max(
+      0,
+      Number($("monthly")?.value || 0)
+    );
+    const income = Math.max(
+      0,
+      Number($("income")?.value || 0)
+    );
 
     const years = retireAge - age;
     const months = years * 12;
@@ -122,10 +133,15 @@ if (downloadProjection) {
         : monthly * ((Math.pow(1 + r, months) - 1) / r);
 
     const totalContrib = monthly * months;
-    const growth = Math.max(0, futureValue - totalContrib);
+    const growth = Math.max(
+      0,
+      futureValue - totalContrib
+    );
 
     const fiscalEnabled =
-      document.querySelector("#taxChoices .choice.active")?.dataset.value !== "no";
+      document.querySelector(
+        "#taxChoices .choice.active"
+      )?.dataset.value !== "no";
 
     const fiscalBenefit = fiscalEnabled
       ? monthly * 12 * 0.20
@@ -138,9 +154,13 @@ if (downloadProjection) {
     });
 
     const blue = [0, 76, 151];
-    const green = [24, 165, 88];
-    const dark = [35, 45, 55];
-    const lightBlue = [240, 247, 252];
+    const darkBlue = [0, 57, 120];
+    const green = [20, 170, 100];
+    const dark = [35, 55, 75];
+    const muted = [95, 120, 145];
+    const softBlue = [241, 248, 253];
+    const softGreen = [235, 250, 242];
+    const white = [255, 255, 255];
 
     const moneyPDF = (value) =>
       new Intl.NumberFormat("es-MX", {
@@ -149,189 +169,347 @@ if (downloadProjection) {
         maximumFractionDigits: 0
       }).format(Math.round(value));
 
-    // Fondo
-    pdf.setFillColor(255, 255, 255);
+    // ==========================================
+    // FONDO
+    // ==========================================
+
+    pdf.setFillColor(...white);
     pdf.rect(0, 0, 210, 297, "F");
 
-    // Encabezado azul
+    // ==========================================
+    // ENCABEZADO
+    // ==========================================
+
+    pdf.setFillColor(...softBlue);
+    pdf.rect(0, 0, 210, 58, "F");
+
     pdf.setFillColor(...blue);
-    pdf.rect(0, 0, 210, 42, "F");
+    pdf.rect(0, 0, 8, 58, "F");
 
-    pdf.setTextColor(255, 255, 255);
+    pdf.setTextColor(...blue);
     pdf.setFont("helvetica", "bold");
-    pdf.setFontSize(10);
-    pdf.text("INVIERTE+", 20, 14);
-
-    pdf.setFontSize(21);
-    pdf.text("TU PROYECCIÓN DE RETIRO", 20, 25);
-
-    pdf.setFont("helvetica", "normal");
-    pdf.setFontSize(10);
-    pdf.text("Un vistazo a tu futuro financiero", 20, 33);
-
-    // Escenario
-    pdf.setTextColor(...dark);
-    pdf.setFont("helvetica", "bold");
-    pdf.setFontSize(13);
-    pdf.text("Tu escenario", 20, 56);
-
-    pdf.setFillColor(...lightBlue);
-    pdf.roundedRect(20, 62, 170, 38, 4, 4, "F");
-
-    pdf.setFont("helvetica", "normal");
     pdf.setFontSize(9);
-    pdf.setTextColor(90, 100, 110);
+    pdf.text("TU PROYECCIÓN DE RETIRO", 20, 14);
 
-    pdf.text("Edad actual", 28, 72);
-    pdf.text("Edad de retiro", 78, 72);
-    pdf.text("Horizonte", 128, 72);
-
-    pdf.setFont("helvetica", "bold");
-    pdf.setFontSize(12);
-    pdf.setTextColor(...dark);
-
-    pdf.text(`${age} años`, 28, 82);
-    pdf.text(`${retireAge} años`, 78, 82);
-    pdf.text(`${years} años`, 128, 82);
+    pdf.setFontSize(22);
+    pdf.text("Un vistazo a tu", 20, 27);
+    pdf.text("futuro financiero", 20, 37);
 
     pdf.setFont("helvetica", "normal");
-    pdf.setFontSize(9);
-    pdf.setTextColor(90, 100, 110);
-    pdf.text("Aportación mensual", 28, 94);
+    pdf.setFontSize(8.5);
+    pdf.setTextColor(...muted);
 
+    pdf.text(
+      "Una primera referencia para visualizar tu escenario",
+      20,
+      47
+    );
+
+    pdf.text(
+      "de retiro y las oportunidades que puedes aprovechar hoy.",
+      20,
+      53
+    );
+
+    // Allianz tipográfico
+    pdf.setTextColor(...blue);
     pdf.setFont("helvetica", "bold");
-    pdf.setFontSize(12);
-    pdf.setTextColor(...dark);
-    pdf.text(moneyPDF(monthly), 78, 94);
+    pdf.setFontSize(17);
+    pdf.text("Allianz", 160, 18);
 
-    // Proyección
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(7);
+    pdf.text("Distribuidor Autorizado", 160, 24);
+
+    // ==========================================
+    // TU ESCENARIO
+    // ==========================================
+
+    pdf.setFillColor(...softBlue);
+    pdf.roundedRect(12, 64, 186, 48, 5, 5, "F");
+
+    pdf.setTextColor(...blue);
     pdf.setFont("helvetica", "bold");
-    pdf.setFontSize(13);
-    pdf.setTextColor(...dark);
-    pdf.text("Tu proyección", 20, 118);
+    pdf.setFontSize(14);
+    pdf.text("Tu escenario", 20, 76);
 
-    const rows = [
-      ["Total de tus aportaciones", moneyPDF(totalContrib)],
-      ["Crecimiento estimado", moneyPDF(growth)]
+    const columns = [
+      { x: 20, label: "Edad actual", value: `${age}`, suffix: "años" },
+      { x: 55, label: "Edad de retiro", value: `${retireAge}`, suffix: "años" },
+      { x: 92, label: "Horizonte de inversión", value: `${years}`, suffix: "años" },
+      { x: 132, label: "Ingreso mensual actual", value: income > 0 ? moneyPDF(income) : "—", suffix: income > 0 ? "(aprox.)" : "" },
+      { x: 170, label: "Aportación mensual", value: moneyPDF(monthly), suffix: "" }
     ];
 
-    let y = 130;
+    columns.forEach((item, index) => {
+      if (index > 0) {
+        pdf.setDrawColor(150, 185, 215);
+        pdf.setLineWidth(0.3);
+        pdf.line(item.x - 7, 82, item.x - 7, 103);
+      }
 
-    rows.forEach(([label, value]) => {
+      pdf.setTextColor(...muted);
       pdf.setFont("helvetica", "normal");
-      pdf.setFontSize(10);
-      pdf.setTextColor(80, 90, 100);
-      pdf.text(label, 20, y);
+      pdf.setFontSize(6.5);
+      pdf.text(item.label, item.x, 87);
 
+      pdf.setTextColor(...blue);
       pdf.setFont("helvetica", "bold");
-      pdf.setFontSize(12);
-      pdf.setTextColor(...dark);
-      pdf.text(value, 190, y, { align: "right" });
+      pdf.setFontSize(item.value.length > 9 ? 9 : 14);
+      pdf.text(item.value, item.x, 97);
 
-      y += 13;
+      if (item.suffix) {
+        pdf.setTextColor(...muted);
+        pdf.setFont("helvetica", "normal");
+        pdf.setFontSize(6.5);
+        pdf.text(item.suffix, item.x, 104);
+      }
     });
 
-    // Barras
-    const total = totalContrib + growth;
-    const barWidth = 170;
+    // ==========================================
+    // TU PROYECCIÓN
+    // ==========================================
 
-    const contribWidth = total > 0
-      ? barWidth * (totalContrib / total)
-      : 0;
+    pdf.setFillColor(...darkBlue);
+    pdf.roundedRect(12, 119, 186, 58, 5, 5, "F");
 
-    pdf.setFillColor(...blue);
-    pdf.roundedRect(20, 158, contribWidth, 8, 2, 2, "F");
-
-    pdf.setFillColor(...green);
-    pdf.roundedRect(
-      20 + contribWidth,
-      158,
-      Math.max(0, barWidth - contribWidth),
-      8,
-      2,
-      2,
-      "F"
-    );
+    pdf.setTextColor(...white);
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(14);
+    pdf.text("Tu proyección", 20, 133);
 
     pdf.setFont("helvetica", "normal");
     pdf.setFontSize(8);
-    pdf.setTextColor(80, 90, 100);
+    pdf.text(
+      "Con un rendimiento anual del 10% y una inflación del 4%.",
+      20,
+      142
+    );
 
-    pdf.text("Lo que tú aportas", 20, 173);
-    pdf.text("Crecimiento estimado", 115, 173);
+    // Separador
+    pdf.setDrawColor(110, 165, 205);
+    pdf.setLineWidth(0.3);
+    pdf.line(78, 151, 78, 168);
+    pdf.line(137, 151, 137, 168);
 
-    // Capital final
-    pdf.setFillColor(...blue);
-    pdf.roundedRect(20, 184, 170, 35, 4, 4, "F");
-
-    pdf.setTextColor(255, 255, 255);
+    // Aportaciones
     pdf.setFont("helvetica", "normal");
-    pdf.setFontSize(9);
-    pdf.text("CAPITAL FINAL A LA EDAD DE RETIRO", 30, 195);
+    pdf.setFontSize(7.5);
+    pdf.setTextColor(...white);
+    pdf.text("Total de tus aportaciones", 20, 153);
 
     pdf.setFont("helvetica", "bold");
-    pdf.setFontSize(21);
-    pdf.text(moneyPDF(futureValue), 30, 208);
+    pdf.setFontSize(15);
+    pdf.text(moneyPDF(totalContrib), 20, 163);
 
-    // Beneficio fiscal
-    let footerY = 231;
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(7);
+    pdf.text(`en ${years} años`, 20, 170);
 
-    if (fiscalEnabled) {
-      pdf.setFillColor(244, 250, 246);
-      pdf.roundedRect(20, 227, 170, 25, 4, 4, "F");
+    // Crecimiento
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(7.5);
+    pdf.text("Crecimiento estimado", 87, 153);
 
-      pdf.setTextColor(...green);
-      pdf.setFont("helvetica", "bold");
-      pdf.setFontSize(10);
-      pdf.text("Beneficio fiscal estimado", 28, 237);
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(15);
+    pdf.text(moneyPDF(growth), 87, 163);
 
-      pdf.setTextColor(...dark);
-      pdf.setFontSize(13);
-      pdf.text(moneyPDF(fiscalBenefit), 28, 247);
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(7);
+    pdf.text("(intereses y rendimientos)", 87, 170);
 
-      footerY = 260;
-    }
+    // Capital final
+    pdf.setFillColor(...softGreen);
+    pdf.roundedRect(143, 147, 47, 24, 4, 4, "F");
 
-    // CTA
+    pdf.setTextColor(...darkBlue);
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(7);
+    pdf.text("Capital final", 148, 155);
+
+    pdf.setFontSize(12);
+    pdf.text(moneyPDF(futureValue), 148, 163);
+
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(6.5);
+    pdf.text("a la edad de retiro", 148, 169);
+
+    // ==========================================
+    // ¿CÓMO SE CONSTRUYE TU CAPITAL?
+    // ==========================================
+
+    pdf.setDrawColor(205, 225, 240);
+    pdf.setLineWidth(0.4);
+    pdf.roundedRect(12, 184, 112, 57, 4, 4, "S");
+
     pdf.setTextColor(...blue);
     pdf.setFont("helvetica", "bold");
     pdf.setFontSize(11);
-    pdf.text("¿Quieres que revisemos juntos este escenario?", 20, footerY);
+    pdf.text("¿Cómo se construye", 19, 196);
+    pdf.text("tu capital?", 19, 203);
 
+    const total = totalContrib + growth;
+    const contributionWidth =
+      total > 0 ? 90 * (totalContrib / total) : 0;
+
+    const growthWidth =
+      total > 0 ? 90 * (growth / total) : 0;
+
+    // Aportaciones
     pdf.setTextColor(...dark);
     pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(7.5);
+    pdf.text("Lo que tú aportas", 19, 213);
+
+    pdf.setFillColor(225, 239, 249);
+    pdf.roundedRect(19, 217, 90, 6, 2, 2, "F");
+
+    pdf.setFillColor(...blue);
+
+    if (contributionWidth > 0) {
+      pdf.roundedRect(
+        19,
+        217,
+        contributionWidth,
+        6,
+        2,
+        2,
+        "F"
+      );
+    }
+
+    pdf.setTextColor(...blue);
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(8);
+    pdf.text(moneyPDF(totalContrib), 113, 222, {
+      align: "right"
+    });
+
+    // Crecimiento
+    pdf.setTextColor(...dark);
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(7.5);
+    pdf.text("Crecimiento estimado", 19, 230);
+
+    pdf.setFillColor(225, 245, 235);
+    pdf.roundedRect(19, 234, 90, 6, 2, 2, "F");
+
+    pdf.setFillColor(...green);
+
+    if (growthWidth > 0) {
+      pdf.roundedRect(
+        19,
+        234,
+        growthWidth,
+        6,
+        2,
+        2,
+        "F"
+      );
+    }
+
+    pdf.setTextColor(...green);
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(8);
+    pdf.text(moneyPDF(growth), 113, 239, {
+      align: "right"
+    });
+
+    // ==========================================
+    // BENEFICIO FISCAL
+    // ==========================================
+
+    if (fiscalEnabled) {
+      pdf.setFillColor(...softBlue);
+      pdf.roundedRect(130, 184, 68, 57, 4, 4, "F");
+
+      pdf.setTextColor(...blue);
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(9);
+      pdf.text("Beneficio fiscal", 137, 197);
+      pdf.text("estimado", 137, 203);
+
+      pdf.setFontSize(17);
+      pdf.text(moneyPDF(fiscalBenefit), 137, 218);
+
+      pdf.setFont("helvetica", "normal");
+      pdf.setFontSize(7);
+      pdf.text("anuales*", 137, 225);
+
+      pdf.setTextColor(...muted);
+      pdf.setFontSize(6.5);
+      pdf.text(
+        "Estimación equivalente al 20%",
+        137,
+        233
+      );
+      pdf.text(
+        "de tus aportaciones anuales.",
+        137,
+        238
+      );
+    }
+
+    // ==========================================
+    // DESCARGA
+    // ==========================================
+
+    pdf.setFillColor(...softBlue);
+    pdf.roundedRect(12, 248, 186, 24, 4, 4, "F");
+
+    pdf.setTextColor(...blue);
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(10);
+    pdf.text("Tu proyección personalizada", 20, 259);
+
+    pdf.setTextColor(...muted);
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(7);
+    pdf.text(
+      "Guarda este resumen y revísalo antes de tomar una decisión.",
+      20,
+      266
+    );
+
+    // ==========================================
+    // CTA
+    // ==========================================
+
+    pdf.setTextColor(...blue);
+    pdf.setFont("helvetica", "bold");
     pdf.setFontSize(9);
     pdf.text(
-      "Agenda una asesoría personalizada con Georgina.",
+      "¿Quieres que revisemos juntos este escenario?",
       20,
-      footerY + 7
+      280
     );
 
     pdf.setTextColor(...green);
     pdf.setFont("helvetica", "bold");
-    pdf.setFontSize(10);
-    pdf.text("georgina@fondosindexados.com.mx", 20, footerY + 16);
-
-    pdf.setTextColor(90, 100, 110);
-    pdf.setFont("helvetica", "normal");
     pdf.setFontSize(8);
-
     pdf.text(
-      "Proyección ilustrativa con supuesto de 10% anual nominal,",
+      "QUIERO MI ASESORÍA PERSONALIZADA",
       20,
-      286
+      287
     );
 
+    pdf.setTextColor(...muted);
+    pdf.setFont("helvetica", "normal");
+    pdf.setFontSize(6.5);
     pdf.text(
-      "inflación de 4% anual y capitalización mensual.",
+      "georgina@fondosindexados.com.mx  •  WhatsApp 55 7244 9150",
       20,
-      291
+      292
     );
+
+    // ==========================================
+    // GUARDAR
+    // ==========================================
 
     pdf.save("Proyeccion-Retiro-Georgina.pdf");
   });
 }
-
 function renderSimpleProgress(contrib, growth) {
   const contribBar = $("contribBar");
   const growthBar = $("growthBar");
