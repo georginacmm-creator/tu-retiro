@@ -713,18 +713,24 @@ if (downloadProjection) {
         lineHeightFactor: 1.45
       });
 
+      // CTA final: dos líneas centradas para evitar que el texto de agenda se salga del bloque.
       pdf.setFillColor(...darkBlue);
-      pdf.roundedRect(12, 263, 186, 19, 4, 4, "F");
+      pdf.roundedRect(12, 261, 186, 23, 4, 4, "F");
+
       pdf.setTextColor(...white);
       pdf.setFont("helvetica", "bold");
-      pdf.setFontSize(9);
-      pdf.text("¿Quieres revisar este escenario conmigo?", 19, 275);
+      pdf.setFontSize(8.5);
+      pdf.text("¿Quieres revisar este escenario conmigo?", 105, 270, {
+        align: "center"
+      });
 
       pdf.setTextColor(...orange);
-      pdf.setFontSize(8);
-      pdf.text("AGENDA TU ASESORÍA PERSONALIZADA →", 126, 275);
+      pdf.setFontSize(7.2);
+      pdf.text("AGENDA TU ASESORÍA PERSONALIZADA →", 105, 279, {
+        align: "center"
+      });
 
-      pdf.link(124, 267, 69, 10, {
+      pdf.link(62, 273, 86, 8, {
         url: CONFIG.calendly
       });
 
