@@ -494,6 +494,11 @@ if (downloadProjection) {
       287
     );
 
+    // El texto funciona como enlace dentro del PDF.
+    pdf.link(20, 281.5, 82, 8, {
+      url: CONFIG.calendly
+    });
+
     pdf.setTextColor(...muted);
     pdf.setFont("helvetica", "normal");
     pdf.setFontSize(6.5);
@@ -508,6 +513,16 @@ if (downloadProjection) {
     // ==========================================
 
     pdf.save("Proyeccion-Retiro-Georgina.pdf");
+
+    // Mantener al prospecto en la landing y mostrar el siguiente paso.
+    const postDownloadCta = $("postDownloadCta");
+    if (postDownloadCta) {
+      postDownloadCta.hidden = false;
+      postDownloadCta.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    }
   });
 }
 function renderSimpleProgress(contrib, growth) {
