@@ -713,20 +713,20 @@ if (downloadProjection) {
         lineHeightFactor: 1.45
       });
 
-      // CTA final: dos líneas centradas para evitar que el texto de agenda se salga del bloque.
+      // CTA final compacto y proporcionado.
       pdf.setFillColor(...darkBlue);
-      pdf.roundedRect(12, 261, 186, 23, 4, 4, "F");
+      pdf.roundedRect(12, 263, 186, 19, 4, 4, "F");
 
       pdf.setTextColor(...white);
       pdf.setFont("helvetica", "bold");
-      pdf.setFontSize(8.5);
-      pdf.text("¿Quieres revisar este escenario conmigo?", 105, 270, {
+      pdf.setFontSize(7.6);
+      pdf.text("¿Quieres revisar este escenario conmigo?", 105, 270.5, {
         align: "center"
       });
 
       pdf.setTextColor(...orange);
-      pdf.setFontSize(7.2);
-      pdf.text("AGENDA TU ASESORÍA PERSONALIZADA →", 105, 279, {
+      pdf.setFontSize(6.4);
+      pdf.text("AGENDA TU ASESORÍA PERSONALIZADA", 105, 277, {
         align: "center"
       });
 
