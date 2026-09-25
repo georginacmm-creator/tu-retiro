@@ -231,16 +231,16 @@ if (downloadProjection) {
           pdf.text("Allianz", 13, 17);
         }
 
+        // Marca: ambas palabras usan exactamente la misma familia, peso y tamaño.
         pdf.setTextColor(...darkBlue);
         pdf.setFont("helvetica", "bold");
-        pdf.setFontSize(15);
+        pdf.setFontSize(16.5);
         pdf.text("OptiMaxx", 77, 16);
 
-        // "plus" usa exactamente el mismo tratamiento visual que "OptiMaxx".
         pdf.setTextColor(...darkBlue);
         pdf.setFont("helvetica", "bold");
-        pdf.setFontSize(15);
-        pdf.text("plus", 108, 16);
+        pdf.setFontSize(16.5);
+        pdf.text("plus", 109, 16);
 
         pdf.setTextColor(...muted);
         pdf.setFont("helvetica", "normal");
@@ -301,11 +301,9 @@ if (downloadProjection) {
       addHeader();
 
       if (heroImage) {
-        pdf.addImage(heroImage.data, heroImage.format, 105, 29, 93, 69);
-        pdf.setFillColor(255, 255, 255);
-        pdf.setGState(new pdf.GState({ opacity: 0.78 }));
-        pdf.rect(96, 29, 42, 69, "F");
-        pdf.setGState(new pdf.GState({ opacity: 1 }));
+        // La imagen se muestra completa y conserva su proporción original.
+        // Antes había una capa blanca semitransparente que dejaba media foto lavada.
+        pdf.addImage(heroImage.data, heroImage.format, 105, 29, 93, 60);
       }
 
       pdf.setTextColor(...darkBlue);
@@ -356,9 +354,9 @@ if (downloadProjection) {
       const growthPct = growth / total;
 
       pdf.setFillColor(...softBlue);
-      pdf.circle(42, 180, 24, "F");
+      pdf.circle(36.5, 180, 23, "F");
       pdf.setFillColor(...blue);
-      pdf.circle(42, 180, 24, "F");
+      pdf.circle(36.5, 180, 23, "F");
 
       // Arcos simulados con líneas radiales para mantener compatibilidad con jsPDF.
       const segments = 48;
@@ -369,20 +367,20 @@ if (downloadProjection) {
         const isGrowth = mid > contribPct;
         pdf.setDrawColor(...(isGrowth ? teal : blue));
         pdf.setLineWidth(6);
-        const x1 = 42 + 20 * Math.cos(startAngle);
+        const x1 = 36.5 + 20 * Math.cos(startAngle);
         const y1 = 180 + 20 * Math.sin(startAngle);
-        const x2 = 42 + 20 * Math.cos(endAngle);
+        const x2 = 36.5 + 20 * Math.cos(endAngle);
         const y2 = 180 + 20 * Math.sin(endAngle);
         pdf.line(x1, y1, x2, y2);
       }
 
       pdf.setFillColor(...white);
-      pdf.circle(42, 180, 11, "F");
+      pdf.circle(36.5, 180, 11, "F");
       pdf.setTextColor(...darkBlue);
       pdf.setFont("helvetica", "bold");
       pdf.setFontSize(7);
-      pdf.text("TU", 42, 179, { align: "center" });
-      pdf.text("PLAN", 42, 184, { align: "center" });
+      pdf.text("TU", 36.5, 179, { align: "center" });
+      pdf.text("PLAN", 36.5, 184, { align: "center" });
 
       pdf.setTextColor(...muted);
       pdf.setFont("helvetica", "normal");
@@ -401,7 +399,7 @@ if (downloadProjection) {
 
       const cards = [
         {
-          x: 67,
+          x: 68,
           title: "TÚ APORTAS",
           value: moneyPDF(totalContrib),
           desc: "Suma de tus aportaciones durante la duración de tu plan.",
@@ -409,7 +407,7 @@ if (downloadProjection) {
           color: blue
         },
         {
-          x: 127,
+          x: 129,
           title: "TU INVERSIÓN CRECE",
           value: moneyPDF(growth),
           desc: "Crecimiento estimado de tu inversión en el tiempo.",
@@ -488,7 +486,8 @@ if (downloadProjection) {
 
       const tableX = 10;
       const tableY = 57;
-      const rowH = years > 35 ? 5.2 : 7;
+      // Altura compacta y fija para que la tabla nunca invada la nota ni las tarjetas.
+      const rowH = years > 27 ? 5.3 : 6.2;
       const headerH = 10;
       const cols = [
         { label: "Edad", w: 18 },
@@ -517,7 +516,7 @@ if (downloadProjection) {
 
       let cumulative = 0;
       let balance = 0;
-      const availableRows = Math.min(years, Math.floor((260 - tableY - headerH) / rowH));
+      const availableRows = Math.min(years, 27);
 
       for (let i = 1; i <= availableRows; i++) {
         const currentAge = age + i;
@@ -574,28 +573,28 @@ if (downloadProjection) {
           "La tabla muestra las primeras " + availableRows +
           " edades para conservar una lectura cómoda. El saldo final de la página 1 corresponde al horizonte completo.",
           12,
-          248,
+          220,
           { maxWidth: 185 }
         );
       }
 
-      roundedCard(12, 258, 58, 22, white, line);
-      roundedCard(76, 258, 58, 22, white, line);
-      roundedCard(140, 258, 58, 22, softBlue, [190, 215, 235]);
+      roundedCard(12, 232, 58, 22, white, line);
+      roundedCard(76, 232, 58, 22, white, line);
+      roundedCard(140, 232, 58, 22, softBlue, [190, 215, 235]);
 
       pdf.setTextColor(...muted);
       pdf.setFont("helvetica", "normal");
       pdf.setFontSize(6.2);
-      pdf.text("Aportaciones acumuladas", 41, 266, { align: "center" });
-      pdf.text("Crecimiento estimado", 105, 266, { align: "center" });
-      pdf.text("Saldo proyectado", 169, 266, { align: "center" });
+      pdf.text("Aportaciones acumuladas", 41, 240, { align: "center" });
+      pdf.text("Crecimiento estimado", 105, 240, { align: "center" });
+      pdf.text("Saldo proyectado", 169, 240, { align: "center" });
 
       pdf.setTextColor(...blue);
       pdf.setFont("helvetica", "bold");
       pdf.setFontSize(10);
-      pdf.text(moneyPDF(totalContrib), 41, 275, { align: "center" });
-      pdf.text(moneyPDF(growth), 105, 275, { align: "center" });
-      pdf.text(moneyPDF(futureValue), 169, 275, { align: "center" });
+      pdf.text(moneyPDF(totalContrib), 41, 249, { align: "center" });
+      pdf.text(moneyPDF(growth), 105, 249, { align: "center" });
+      pdf.text(moneyPDF(futureValue), 169, 249, { align: "center" });
 
       addFooter(2);
 
