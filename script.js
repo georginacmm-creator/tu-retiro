@@ -175,30 +175,37 @@ if (downloadProjection) {
         year: "numeric"
       }).format(new Date());
 
-      const loadImage = (src, format = "JPEG") =>
-        new Promise((resolve) => {
-          const img = new Image();
-          img.onload = () => {
-            try {
-              const canvas = document.createElement("canvas");
-              canvas.width = img.naturalWidth || img.width;
-              canvas.height = img.naturalHeight || img.height;
-              const ctx = canvas.getContext("2d");
-              ctx.drawImage(img, 0, 0);
+      // Cargar la imagen sin pasarla por canvas/recompresión.
+      // Esto conserva mejor la nitidez del archivo original dentro del PDF.
+      const loadImage = async (src, format = "JPEG") => {
+        try {
+          const response = await fetch(src, { cache: "force-cache" });
+          if (!response.ok) throw new Error("No se pudo cargar la imagen.");
+          const blob = await response.blob();
+
+          return await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () =>
               resolve({
-                data: canvas.toDataURL(
-                  format === "PNG" ? "image/png" : "image/jpeg",
-                  0.9
-                ),
+                data: reader.result,
                 format
               });
-            } catch (error) {
-              resolve(null);
-            }
-          };
-          img.onerror = () => resolve(null);
-          img.src = src;
-        });
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+          });
+        } catch (error) {
+          // Respaldo para navegadores donde fetch del asset no esté disponible.
+          return await new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => resolve({
+              data: img,
+              format
+            });
+            img.onerror = () => resolve(null);
+            img.src = src;
+          });
+        }
+      };
 
       const [logoImage, heroImage] = await Promise.all([
         loadImage("assets/allianz-distribuidor.png", "PNG"),
@@ -229,8 +236,9 @@ if (downloadProjection) {
         pdf.setFontSize(15);
         pdf.text("OptiMaxx", 77, 16);
 
-        pdf.setTextColor(...orange);
-        pdf.setFont("helvetica", "normal");
+        // "plus" usa exactamente el mismo tratamiento visual que "OptiMaxx".
+        pdf.setTextColor(...darkBlue);
+        pdf.setFont("helvetica", "bold");
         pdf.setFontSize(15);
         pdf.text("plus", 108, 16);
 
