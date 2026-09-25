@@ -517,7 +517,7 @@ if (downloadProjection) {
         cumulative += annualContribution;
         const yearlyStart = balance;
         balance = yearlyStart * Math.pow(1 + r, 12) +
-          annualContribution * ((Math.pow(1 + r, 12) - 1) / r);
+          monthly * ((Math.pow(1 + r, 12) - 1) / r);
         const annualGrowth = Math.max(0, balance - yearlyStart - annualContribution);
 
         const y = tableY + headerH + (i - 1) * rowH;
