@@ -240,7 +240,7 @@ if (downloadProjection) {
         pdf.setTextColor(...darkBlue);
         pdf.setFont("helvetica", "bold");
         pdf.setFontSize(16.5);
-        pdf.text("plus", 109, 16);
+        pdf.text("plus", 104.5, 16);
 
         pdf.setTextColor(...muted);
         pdf.setFont("helvetica", "normal");
