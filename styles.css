@@ -200,3 +200,56 @@ h3{font-size:24px;color:var(--blue)}
 .testimonial-grid article h3 {
   margin-top: 0;
 }
+
+
+/* CTA que aparece después de descargar la proyección */
+.post-download-cta{
+  margin-top:18px;
+  padding:22px 24px;
+  background:linear-gradient(135deg,#eef8f3,#f7fbff);
+  border:1px solid #cfe8dc;
+  border-radius:18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  box-shadow:0 10px 28px rgba(0,59,122,.08);
+}
+.post-download-cta[hidden]{display:none}
+.post-download-cta>div:first-child{
+  display:flex;
+  align-items:flex-start;
+  gap:13px;
+}
+.post-download-cta strong{
+  display:block;
+  color:var(--blue);
+  font-size:17px;
+  line-height:1.2;
+}
+.post-download-cta p{
+  margin:5px 0 0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+}
+.post-download-check{
+  width:32px;
+  height:32px;
+  flex:0 0 32px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:var(--green);
+  color:#fff;
+  font-weight:900;
+}
+@media(max-width:620px){
+  .post-download-cta{
+    flex-direction:column;
+    align-items:stretch;
+  }
+  .post-download-cta .btn{
+    width:100%;
+  }
+}
