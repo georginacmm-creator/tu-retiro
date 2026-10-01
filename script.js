@@ -28,7 +28,9 @@ function calculate() {
   );
 
   const months = (retireAge - age) * 12;
-  const r = CONFIG.annualRate / 12;
+  // La proyección combina el 10% de rendimiento indicado y el 4% de inflación solicitado.
+  const projectedAnnualRate = CONFIG.annualRate + CONFIG.annualInflation;
+  const r = projectedAnnualRate / 12;
 
   const futureContrib =
     r === 0
@@ -121,14 +123,11 @@ if (downloadProjection) {
         0,
         Number($("monthly")?.value || 0)
       );
-      const income = Math.max(
-        0,
-        Number($("income")?.value || 0)
-      );
-
       const years = retireAge - age;
       const months = years * 12;
-      const r = CONFIG.annualRate / 12;
+      // La proyección combina el 10% de rendimiento indicado y el 4% de inflación solicitado.
+      const projectedAnnualRate = CONFIG.annualRate + CONFIG.annualInflation;
+      const r = projectedAnnualRate / 12;
 
       const futureValue =
         r === 0
@@ -325,8 +324,7 @@ if (downloadProjection) {
       pdf.setFontSize(7.5);
       pdf.text(
         "Con una aportación mensual de " + moneyPDF(monthly) +
-        " y una proyección de crecimiento anual del " +
-        Math.round(CONFIG.annualRate * 100) + "%.",
+        ", considerando 10% de rendimiento + 4% de inflación (14% anual de proyección).",
         14,
         87,
         { maxWidth: 82 }
@@ -338,7 +336,7 @@ if (downloadProjection) {
       metric(53, "Edad retiro", retireAge + " años");
       metric(89, "Aportación mensual", moneyPDF(monthly), "", monthly >= 100000 ? 8 : 9);
       metric(132, "Inflación considerada", Math.round(CONFIG.annualInflation * 100) + "%");
-      metric(169, "Tasa anual proyectada", Math.round(CONFIG.annualRate * 100) + "%", "", 9);
+      metric(169, "Tasa de proyección", Math.round(projectedAnnualRate * 100) + "%", "", 9);
 
       pdf.setDrawColor(...line);
       [48, 84, 127, 164].forEach((x) => pdf.line(x, 107, x, 125));
@@ -478,8 +476,8 @@ if (downloadProjection) {
       pdf.setFont("helvetica", "normal");
       pdf.setFontSize(7.5);
       pdf.text(
-        "Escenario calculado con la aportación mensual actual y la tasa anual proyectada de " +
-        Math.round(CONFIG.annualRate * 100) + "%.",
+        "Escenario calculado con la aportación mensual actual y una tasa de proyección de " +
+        Math.round(projectedAnnualRate * 100) + "% (10% de rendimiento + 4% de inflación).",
         13,
         48
       );
@@ -664,7 +662,7 @@ if (downloadProjection) {
 
       pdf.text(
         [
-          "• Tasa anual proyectada: " + Math.round(CONFIG.annualRate * 100) + "%",
+          "• Rendimiento supuesto: " + Math.round(CONFIG.annualRate * 100) + "%",
           "• Inflación considerada: " + Math.round(CONFIG.annualInflation * 100) + "%",
           "• Crecimiento estimado: " + moneyPDF(growth),
           "• Saldo proyectado: " + moneyPDF(futureValue)
@@ -679,14 +677,14 @@ if (downloadProjection) {
         pdf.setTextColor(...blue);
         pdf.setFont("helvetica", "bold");
         pdf.setFontSize(9);
-        pdf.text("Beneficio fiscal estimado", 19, 177);
+        pdf.text("Referencia fiscal ilustrativa", 19, 177);
         pdf.setFontSize(14);
         pdf.text(moneyPDF(fiscalBenefit), 19, 188);
         pdf.setTextColor(...muted);
         pdf.setFont("helvetica", "normal");
         pdf.setFontSize(6.5);
         pdf.text(
-          "Estimación anual equivalente al 20% de las aportaciones consideradas en la calculadora. La aplicación real depende de tu situación fiscal y de la legislación vigente.",
+          "Referencia educativa equivalente al 20% de las aportaciones consideradas. La aplicación real depende de tu situación fiscal y de la legislación vigente.",
           67,
           177,
           { maxWidth: 123 }
@@ -808,7 +806,7 @@ function renderSimpleProgress(contrib, growth) {
 }
 
 // Recalcular cuando cambien los datos
-["age", "retireAge", "income", "monthly"].forEach((id) => {
+["age", "retireAge", "monthly"].forEach((id) => {
   const input = $(id);
 
   if (input) {
@@ -878,7 +876,8 @@ if (leadForm) {
     const monthly = Number($("monthly")?.value || 0);
 
     const months = Math.max(0, (retireAge - age) * 12);
-    const r = CONFIG.annualRate / 12;
+    const projectedAnnualRate = CONFIG.annualRate + CONFIG.annualInflation;
+    const r = projectedAnnualRate / 12;
 
     const futureValue =
       r === 0
