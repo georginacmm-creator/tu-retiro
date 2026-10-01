@@ -94,17 +94,17 @@ function calculate() {
   }
 
   if ($("summaryContrib")) {
-    $("summaryContrib").textContent = money(totalContrib);
+    $("summaryContrib").textContent = money(totalContribWithInflation);
   }
 
   if ($("summaryGrowth")) {
-    $("summaryGrowth").textContent = money(growth);
+    $("summaryGrowth").textContent = money(growthWithInflation);
   }
 
   if ($("futureValue")) {
-    $("futureValue").textContent = money(futureValue);
+    $("futureValue").textContent = money(futureValueWithInflation);
   }
-  if ($("realValue")) $("realValue").textContent = money(futureValueWithInflation);
+  if ($("futureValueWithoutInflation")) $("futureValueWithoutInflation").textContent = money(futureValue);
   if ($("futureValueWithInflation")) $("futureValueWithInflation").textContent = money(futureValueWithInflation);
 
   if ($("fiscalValue")) {
@@ -112,7 +112,7 @@ function calculate() {
   }
 
   // Gráfica simple
-  renderSimpleProgress(totalContrib, growth);
+  renderSimpleProgress(totalContribWithInflation, growthWithInflation);
 
   // Escenario del formulario
   if ($("leadScenarioValue")) {
