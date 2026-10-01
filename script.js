@@ -1080,6 +1080,15 @@ if (leadForm) {
     );
   });
 }
+// Medición de clics en agenda directa
+document.querySelectorAll('a[href*="calendly.com/"]').forEach((link) => {
+  link.addEventListener("click", () => {
+    trackConversion("schedule_click", {
+      lead_source: "landing_calendly"
+    });
+  });
+});
+
 // Botones de WhatsApp
 const whatsappUrl = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(
   "Hola Georgina, quiero hablar sobre mi retiro."
