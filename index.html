@@ -47,8 +47,8 @@
       <div class="container">
         <div class="section-head centered">
           <p class="eyebrow">TU ESCENARIO</p>
-          <h2>¿Cuánto necesitas para retirarte como quieres?</h2>
-          <p>Haz una primera proyección con tus propios datos. El resultado es ilustrativo y no representa un rendimiento garantizado.</p>
+          <h2>¿Cuánto podría crecer tu ahorro para el retiro?</h2>
+          <p>Haz una primera proyección con tu edad, tu edad de retiro y una aportación mensual. El resultado es ilustrativo y no representa un rendimiento garantizado.</p>
         </div>
 
       <div class="calc-shell">
@@ -61,9 +61,6 @@
         <input id="retireAge" type="number" min="40" max="90">
       </label>
     </div>
-    <label>¿Cuál es tu ingreso mensual actual?
-      <div class="money-input"><span>$</span><input id="income" type="number" min="0" step="1000"></div>
-    </label>
     <label>¿Cuánto podrías invertir cada mes?
       <div class="money-input"><span>$</span><input id="monthly" type="number" min="500" step="500" value="2500"></div>
     </label>
@@ -89,12 +86,12 @@
             <div class="summary-list">
               <div><span>Años de inversión</span><strong id="summaryYears">27 años</strong></div>
               <div><span>Edad de término</span><strong id="summaryAge">65 años</strong></div>
-              <div><span>Capital invertido</span><strong id="summaryContrib">$4,860,000</strong></div>
-              <div><span>Interés / crecimiento estimado</span><strong id="summaryGrowth">$26,682,629</strong></div>
+              <div><span>Aportaciones acumuladas</span><strong id="summaryContrib">$4,860,000</strong></div>
+              <div><span>Crecimiento proyectado</span><strong id="summaryGrowth">$26,682,629</strong></div>
             </div>
 
             <div class="final-result">
-              <span>Capital final a la edad de retiro</span>
+              <span>Patrimonio proyectado a tu edad de retiro</span>
               <strong id="futureValue">$32,042,629</strong>
               <small>Proyección ilustrativa. Total de tus aportaciones más crecimiento estimado.</small>
             </div>
@@ -124,13 +121,13 @@
 
             <div class="fiscal-result" id="fiscalResult">
               <div>
-                <span>Beneficio fiscal estimado</span>
+                <span>Referencia fiscal ilustrativa</span>
                 <strong id="fiscalValue">$36,000</strong>
-                <small>Estimación ilustrativa equivalente al 20% de tus aportaciones anuales.</small>
+                <small>Referencia educativa equivalente al 20% de tus aportaciones anuales. El beneficio aplicable depende de tu situación fiscal y de las condiciones vigentes.</small>
               </div>
             </div>
 
-            <p class="disclaimer">* Proyección ilustrativa con supuesto de 10% anual nominal, inflación de 4% anual y capitalización mensual. El beneficio fiscal mostrado usa 20% únicamente como referencia educativa; no es una garantía ni sustituye el cálculo fiscal de tu situación particular. La aplicación de beneficios depende de la legislación vigente, del producto contratado y de las circunstancias del contribuyente.</p>
+            <p class="disclaimer">* Proyección ilustrativa calculada con un supuesto de 10% anual de rendimiento más 4% de inflación, para una tasa de proyección de 14% anual, con capitalización mensual. El beneficio fiscal mostrado usa 20% únicamente como referencia educativa; no es una garantía ni sustituye el cálculo fiscal de tu situación particular. La aplicación de beneficios depende de la legislación vigente, del producto contratado y de las circunstancias del contribuyente.</p>
           </div>
         </div>
       </div>
