@@ -786,7 +786,16 @@ if (downloadProjection) {
 
       addFooter(3);
 
-      pdf.save("Proyeccion-Retiro-Georgina.pdf");
+      const clientName = (document.querySelector('#leadForm input[name="name"]')?.value || "").trim();
+      const safeClientName = clientName
+        ? clientName
+            .normalize("NFD")
+            .replace(/[\\u0300-\\u036f]/g, "")
+            .replace(/[^a-zA-Z0-9]+/g, "-")
+            .replace(/^-+|-+$/g, "")
+        : "Cliente";
+
+      pdf.save("Proyeccion-Retiro-" + safeClientName + ".pdf");
 
       const postDownloadCta = $("postDownloadCta");
       if (postDownloadCta) {
