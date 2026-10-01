@@ -180,8 +180,24 @@ if (downloadProjection) {
       const months = years * 12;
       const projection = projectScenario(monthly, months, false);
       const projectionWithInflation = projectScenario(monthly, months, true);
-      const { futureValue, totalContrib, growth, annualSnapshots } = projection;
-      const { futureValue: futureValueWithInflation, totalContrib: totalContribWithInflation, growth: growthWithInflation } = projectionWithInflation;
+
+      const inflationEnabled =
+        document.querySelector("#inflationChoice .choice.active")?.dataset.value !== "no";
+
+      const selectedProjection = inflationEnabled
+        ? projectionWithInflation
+        : projection;
+
+      const {
+        futureValue,
+        totalContrib,
+        growth,
+        annualSnapshots
+      } = selectedProjection;
+
+      const scenarioLabel = inflationEnabled
+        ? "incremento del 5% anual en la aportación"
+        : "aportación mensual constante";
 
       const fiscalEnabled =
         document.querySelector("#taxChoices .choice.active")?.dataset.value !== "no";
@@ -369,7 +385,8 @@ if (downloadProjection) {
       pdf.setFont("helvetica", "normal");
       pdf.setFontSize(7.5);
       pdf.text(
-        "Con una aportación mensual de " + moneyPDF(monthly) +
+        "Con una aportación inicial de " + moneyPDF(monthly) +
+        ", " + scenarioLabel +
         " y un supuesto de crecimiento anual del " +
         Math.round(CONFIG.annualRate * 100) + "% antes de cargos.",
         14,
@@ -382,7 +399,11 @@ if (downloadProjection) {
       metric(17, "Edad actual", age + " años");
       metric(53, "Edad retiro", retireAge + " años");
       metric(89, "Aportación mensual", moneyPDF(monthly), "", monthly >= 100000 ? 8 : 9);
-      metric(132, "Inflación considerada", Math.round(CONFIG.annualInflation * 100) + "%");
+      metric(
+        132,
+        "Incremento aportación",
+        inflationEnabled ? Math.round(CONFIG.annualInflation * 100) + "%" : "0%"
+      );
       metric(169, "Rendimiento supuesto", Math.round(CONFIG.annualRate * 100) + "%", "", 9);
 
       pdf.setDrawColor(...line);
@@ -523,7 +544,8 @@ if (downloadProjection) {
       pdf.setFont("helvetica", "normal");
       pdf.setFontSize(7.5);
       pdf.text(
-        "Escenario calculado con la aportación mensual actual y un supuesto de crecimiento anual del " +
+        "Escenario con " + scenarioLabel +
+        " y un supuesto de crecimiento anual del " +
         Math.round(CONFIG.annualRate * 100) + "% antes de cargos.",
         13,
         48
@@ -566,7 +588,9 @@ if (downloadProjection) {
         const snapshot = annualSnapshots[i - 1] || annualSnapshots[annualSnapshots.length - 1];
         const cumulative = snapshot ? snapshot.contribution : 0;
         const balance = snapshot ? snapshot.balance : 0;
-        const annualContribution = monthly * 12;
+        const annualContribution = snapshot
+          ? snapshot.monthlyContribution * 12
+          : monthly * 12;
         const previousBalance = i === 1 ? 0 : (annualSnapshots[i - 2]?.balance || 0);
         const annualGrowth = Math.max(0, balance - previousBalance - annualContribution);
 
@@ -695,8 +719,8 @@ if (downloadProjection) {
       pdf.setFontSize(7);
       pdf.text(
         [
-          "• Aportación mensual: " + moneyPDF(monthly),
-          "• Aportación anual: " + moneyPDF(monthly * 12),
+          "• Aportación inicial: " + moneyPDF(monthly),
+          "• Aportación anual inicial: " + moneyPDF(monthly * 12),
           "• Horizonte: " + years + " años",
           "• Aportaciones totales: " + moneyPDF(totalContrib)
         ],
@@ -708,7 +732,7 @@ if (downloadProjection) {
       pdf.text(
         [
           "• Rendimiento supuesto: " + Math.round(CONFIG.annualRate * 100) + "%",
-          "• Inflación considerada: " + Math.round(CONFIG.annualInflation * 100) + "%",
+          "• Incremento de aportación: " + (inflationEnabled ? Math.round(CONFIG.annualInflation * 100) + "%" : "0%"),
           "• Crecimiento estimado: " + moneyPDF(growth),
           "• Saldo proyectado: " + moneyPDF(futureValue)
         ],
