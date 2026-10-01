@@ -77,6 +77,13 @@ function calculate() {
   const { futureValue, totalContrib, growth } = projection;
   const { futureValue: futureValueWithInflation, totalContrib: totalContribWithInflation, growth: growthWithInflation } = projectionWithInflation;
 
+  const inflationEnabled =
+    document.querySelector("#inflationChoice .choice.active")?.dataset.value !== "no";
+
+  const selectedFutureValue = inflationEnabled ? futureValueWithInflation : futureValue;
+  const selectedTotalContrib = inflationEnabled ? totalContribWithInflation : totalContrib;
+  const selectedGrowth = inflationEnabled ? growthWithInflation : growth;
+
   const fiscalEnabled =
     document.querySelector("#taxChoices .choice.active")?.dataset.value !== "no";
 
@@ -94,25 +101,33 @@ function calculate() {
   }
 
   if ($("summaryContrib")) {
-    $("summaryContrib").textContent = money(totalContribWithInflation);
+    $("summaryContrib").textContent = money(selectedTotalContrib);
   }
 
   if ($("summaryGrowth")) {
-    $("summaryGrowth").textContent = money(growthWithInflation);
+    $("summaryGrowth").textContent = money(selectedGrowth);
   }
 
   if ($("futureValue")) {
-    $("futureValue").textContent = money(futureValueWithInflation);
+    $("futureValue").textContent = money(selectedFutureValue);
   }
-  if ($("futureValueWithoutInflation")) $("futureValueWithoutInflation").textContent = money(futureValue);
-  if ($("futureValueWithInflation")) $("futureValueWithInflation").textContent = money(futureValueWithInflation);
+  if ($("futureValueLabel")) {
+    $("futureValueLabel").textContent = inflationEnabled
+      ? "Patrimonio proyectado con incremento del 5% anual"
+      : "Patrimonio proyectado sin incremento anual";
+  }
+  if ($("futureValueNote")) {
+    $("futureValueNote").textContent = inflationEnabled
+      ? "Escenario ilustrativo. La aportación mensual aumenta 5% al inicio de cada año."
+      : "Escenario ilustrativo. Mantienes la misma aportación mensual durante todo el plazo.";
+  }
 
   if ($("fiscalValue")) {
     $("fiscalValue").textContent = money(fiscalBenefit);
   }
 
   // Gráfica simple
-  renderSimpleProgress(totalContribWithInflation, growthWithInflation);
+  renderSimpleProgress(selectedTotalContrib, selectedGrowth);
 
   // Escenario del formulario
   if ($("leadScenarioValue")) {
@@ -850,6 +865,18 @@ document.querySelectorAll("#taxChoices .choice").forEach((choice) => {
   choice.addEventListener("click", () => {
     document
       .querySelectorAll("#taxChoices .choice")
+      .forEach((item) => item.classList.remove("active"));
+
+    choice.classList.add("active");
+    calculate();
+  });
+});
+
+// Actualización anual de la aportación: el cliente elige el escenario
+document.querySelectorAll("#inflationChoice .choice").forEach((choice) => {
+  choice.addEventListener("click", () => {
+    document
+      .querySelectorAll("#inflationChoice .choice")
       .forEach((item) => item.classList.remove("active"));
 
     choice.classList.add("active");
