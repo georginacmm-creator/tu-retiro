@@ -10,26 +10,46 @@ const CONFIG = {
   googleSheetsUrl: "https://script.google.com/macros/s/AKfycbxfPqfnSDF2Kl8dkdRHWn0QM9WPrvuC15mITAY4sdwJkmQr-jZ8hQd7rknMsfd1woqy8w/exec"
 };
 
-function projectScenario(monthly, months) {
-  let balance = 0, totalContrib = 0;
+function projectScenario(monthly, months, increaseContributions = false) {
+  let balance = 0;
+  let totalContrib = 0;
   const annualSnapshots = [];
   const monthlyRate = Math.pow(1 + CONFIG.annualRate, 1 / 12) - 1;
+
   for (let month = 1; month <= months; month++) {
-    totalContrib += monthly;
-    balance += monthly;
+    const yearIndex = Math.floor((month - 1) / 12);
+    const currentMonthly = increaseContributions
+      ? monthly * Math.pow(1 + CONFIG.annualInflation, yearIndex)
+      : monthly;
+
+    totalContrib += currentMonthly;
+    balance += currentMonthly;
     balance += balance * monthlyRate;
     balance -= balance * CONFIG.monthlyManagementFee;
-    if (month <= 18 && month % 3 === 0) balance -= balance * CONFIG.quarterlyAdminFee;
-    if (month >= 19) balance -= CONFIG.monthlyFixedFeeUDI * CONFIG.udiValue;
+
+    if (month <= 18 && month % 3 === 0) {
+      balance -= balance * CONFIG.quarterlyAdminFee;
+    }
+
+    if (month >= 19) {
+      balance -= CONFIG.monthlyFixedFeeUDI * CONFIG.udiValue;
+    }
+
     balance = Math.max(0, balance);
-    if (month % 12 === 0 || month === months) annualSnapshots.push({ contribution: totalContrib, balance });
+
+    if (month % 12 === 0 || month === months) {
+      annualSnapshots.push({
+        contribution: totalContrib,
+        monthlyContribution: currentMonthly,
+        balance
+      });
+    }
   }
+
   const futureValue = balance;
   const growth = Math.max(0, futureValue - totalContrib);
-  const realValue = futureValue / Math.pow(1 + CONFIG.annualInflation, months / 12);
-  return { futureValue, totalContrib, growth, realValue, annualSnapshots };
+  return { futureValue, totalContrib, growth, annualSnapshots };
 }
-
 const $ = (id) => document.getElementById(id);
 
 const money = (n) =>
@@ -52,8 +72,10 @@ function calculate() {
   );
 
   const months = (retireAge - age) * 12;
-  const projection = projectScenario(monthly, months);
-  const { futureValue, totalContrib, growth, realValue } = projection;
+  const projection = projectScenario(monthly, months, false);
+  const projectionWithInflation = projectScenario(monthly, months, true);
+  const { futureValue, totalContrib, growth } = projection;
+  const { futureValue: futureValueWithInflation, totalContrib: totalContribWithInflation, growth: growthWithInflation } = projectionWithInflation;
 
   const fiscalEnabled =
     document.querySelector("#taxChoices .choice.active")?.dataset.value !== "no";
@@ -82,7 +104,8 @@ function calculate() {
   if ($("futureValue")) {
     $("futureValue").textContent = money(futureValue);
   }
-  if ($("realValue")) $("realValue").textContent = money(realValue);
+  if ($("realValue")) $("realValue").textContent = money(futureValueWithInflation);
+  if ($("futureValueWithInflation")) $("futureValueWithInflation").textContent = money(futureValueWithInflation);
 
   if ($("fiscalValue")) {
     $("fiscalValue").textContent = money(fiscalBenefit);
@@ -140,8 +163,10 @@ if (downloadProjection) {
       );
       const years = retireAge - age;
       const months = years * 12;
-      const projection = projectScenario(monthly, months);
-      const { futureValue, totalContrib, growth, realValue, annualSnapshots } = projection;
+      const projection = projectScenario(monthly, months, false);
+      const projectionWithInflation = projectScenario(monthly, months, true);
+      const { futureValue, totalContrib, growth, annualSnapshots } = projection;
+      const { futureValue: futureValueWithInflation, totalContrib: totalContribWithInflation, growth: growthWithInflation } = projectionWithInflation;
 
       const fiscalEnabled =
         document.querySelector("#taxChoices .choice.active")?.dataset.value !== "no";
@@ -881,8 +906,10 @@ if (leadForm) {
     const monthly = Number($("monthly")?.value || 0);
 
     const months = Math.max(0, (retireAge - age) * 12);
-    const projection = projectScenario(monthly, months);
-    const { futureValue, totalContrib, growth, realValue } = projection;
+    const projection = projectScenario(monthly, months, false);
+    const projectionWithInflation = projectScenario(monthly, months, true);
+    const { futureValue, totalContrib, growth } = projection;
+    const { futureValue: futureValueWithInflation, totalContrib: totalContribWithInflation, growth: growthWithInflation } = projectionWithInflation;
 
     const fiscalEnabled =
       document.querySelector("#taxChoices .choice.active")?.dataset.value !== "no";
