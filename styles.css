@@ -365,3 +365,28 @@ h3{font-size:24px;color:var(--blue)}
 .logo-card > a{
   display:block;
 }
+
+
+.ad-disclosure{
+  margin:14px 0 0;
+  padding:12px 14px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:#fafcfe;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.5;
+}
+.ad-disclosure strong{
+  display:block;
+  color:var(--blue);
+  font-size:12px;
+  margin-bottom:4px;
+}
+.ad-disclosure p{
+  margin:4px 0 0;
+}
+.ad-disclosure-links a{
+  color:var(--blue);
+  text-decoration:underline;
+}
