@@ -1,10 +1,34 @@
 const CONFIG = {
   annualRate: 0.10,
   annualInflation: 0.04,
+  monthlyManagementFee: 0.001,
+  quarterlyAdminFee: 0.009,
+  monthlyFixedFeeUDI: 15,
+  udiValue: 8.834094,
   calendly: "https://calendly.com/georgina-inviertemas/fondosindexados",
   whatsapp: "525572449150",
   googleSheetsUrl: "https://script.google.com/macros/s/AKfycbxfPqfnSDF2Kl8dkdRHWn0QM9WPrvuC15mITAY4sdwJkmQr-jZ8hQd7rknMsfd1woqy8w/exec"
 };
+
+function projectScenario(monthly, months) {
+  let balance = 0, totalContrib = 0;
+  const annualSnapshots = [];
+  const monthlyRate = Math.pow(1 + CONFIG.annualRate, 1 / 12) - 1;
+  for (let month = 1; month <= months; month++) {
+    totalContrib += monthly;
+    balance += monthly;
+    balance += balance * monthlyRate;
+    balance -= balance * CONFIG.monthlyManagementFee;
+    if (month <= 18 && month % 3 === 0) balance -= balance * CONFIG.quarterlyAdminFee;
+    if (month >= 19) balance -= CONFIG.monthlyFixedFeeUDI * CONFIG.udiValue;
+    balance = Math.max(0, balance);
+    if (month % 12 === 0 || month === months) annualSnapshots.push({ contribution: totalContrib, balance });
+  }
+  const futureValue = balance;
+  const growth = Math.max(0, futureValue - totalContrib);
+  const realValue = futureValue / Math.pow(1 + CONFIG.annualInflation, months / 12);
+  return { futureValue, totalContrib, growth, realValue, annualSnapshots };
+}
 
 const $ = (id) => document.getElementById(id);
 
@@ -28,20 +52,8 @@ function calculate() {
   );
 
   const months = (retireAge - age) * 12;
-  // La inflación se muestra como supuesto informativo; no se suma al rendimiento.
-  // Los cargos del producto se descuentan como una aproximación anual equivalente.
-  const annualCharges = (0.001 * 12) + (0.009 * 4);
-  const netAnnualRate = Math.max(0, CONFIG.annualRate - annualCharges);
-  const r = netAnnualRate / 12;
-
-  const futureContrib =
-    r === 0
-      ? monthly * months
-      : monthly * ((Math.pow(1 + r, months) - 1) / r);
-
-  const futureValue = futureContrib;
-  const totalContrib = monthly * months;
-  const growth = Math.max(0, futureValue - totalContrib);
+  const projection = projectScenario(monthly, months);
+  const { futureValue, totalContrib, growth, realValue } = projection;
 
   const fiscalEnabled =
     document.querySelector("#taxChoices .choice.active")?.dataset.value !== "no";
@@ -70,6 +82,7 @@ function calculate() {
   if ($("futureValue")) {
     $("futureValue").textContent = money(futureValue);
   }
+  if ($("realValue")) $("realValue").textContent = money(realValue);
 
   if ($("fiscalValue")) {
     $("fiscalValue").textContent = money(fiscalBenefit);
@@ -127,17 +140,8 @@ if (downloadProjection) {
       );
       const years = retireAge - age;
       const months = years * 12;
-      const annualCharges = (0.001 * 12) + (0.009 * 4);
-      const netAnnualRate = Math.max(0, CONFIG.annualRate - annualCharges);
-      const r = netAnnualRate / 12;
-
-      const futureValue =
-        r === 0
-          ? monthly * months
-          : monthly * ((Math.pow(1 + r, months) - 1) / r);
-
-      const totalContrib = monthly * months;
-      const growth = Math.max(0, futureValue - totalContrib);
+      const projection = projectScenario(monthly, months);
+      const { futureValue, totalContrib, growth, realValue, annualSnapshots } = projection;
 
       const fiscalEnabled =
         document.querySelector("#taxChoices .choice.active")?.dataset.value !== "no";
@@ -515,18 +519,16 @@ if (downloadProjection) {
         cx += col.w;
       });
 
-      let cumulative = 0;
-      let balance = 0;
       const availableRows = Math.min(years, 27);
 
       for (let i = 1; i <= availableRows; i++) {
         const currentAge = age + i;
+        const snapshot = annualSnapshots[i - 1] || annualSnapshots[annualSnapshots.length - 1];
+        const cumulative = snapshot ? snapshot.contribution : 0;
+        const balance = snapshot ? snapshot.balance : 0;
         const annualContribution = monthly * 12;
-        cumulative += annualContribution;
-        const yearlyStart = balance;
-        balance = yearlyStart * Math.pow(1 + r, 12) +
-          monthly * ((Math.pow(1 + r, 12) - 1) / r);
-        const annualGrowth = Math.max(0, balance - yearlyStart - annualContribution);
+        const previousBalance = i === 1 ? 0 : (annualSnapshots[i - 2]?.balance || 0);
+        const annualGrowth = Math.max(0, balance - previousBalance - annualContribution);
 
         const y = tableY + headerH + (i - 1) * rowH;
 
@@ -879,17 +881,8 @@ if (leadForm) {
     const monthly = Number($("monthly")?.value || 0);
 
     const months = Math.max(0, (retireAge - age) * 12);
-    const annualCharges = (0.001 * 12) + (0.009 * 4);
-    const netAnnualRate = Math.max(0, CONFIG.annualRate - annualCharges);
-    const r = netAnnualRate / 12;
-
-    const futureValue =
-      r === 0
-        ? monthly * months
-        : monthly * ((Math.pow(1 + r, months) - 1) / r);
-
-    const totalContrib = monthly * months;
-    const growth = Math.max(0, futureValue - totalContrib);
+    const projection = projectScenario(monthly, months);
+    const { futureValue, totalContrib, growth, realValue } = projection;
 
     const fiscalEnabled =
       document.querySelector("#taxChoices .choice.active")?.dataset.value !== "no";
