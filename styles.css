@@ -253,3 +253,39 @@ h3{font-size:24px;color:var(--blue)}
     width:100%;
   }
 }
+
+/* Costos y condiciones */
+.costs-note{
+  padding:22px 0 28px;
+  background:#fff;
+}
+.costs-note-inner{
+  max-width:980px;
+  margin:0 auto;
+  padding:16px 20px;
+  border-top:1px solid var(--line);
+  color:#7b8794;
+}
+.costs-note-inner strong{
+  display:block;
+  margin-bottom:5px;
+  color:#687586;
+  font-size:12px;
+  font-weight:700;
+}
+.costs-note-inner p{
+  margin:0;
+  font-size:11px;
+  line-height:1.55;
+}
+@media(max-width:620px){
+  .costs-note{
+    padding:18px 0 22px;
+  }
+  .costs-note-inner{
+    padding:14px 16px;
+  }
+  .costs-note-inner p{
+    font-size:10.5px;
+  }
+}
