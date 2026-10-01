@@ -1,6 +1,6 @@
 const CONFIG = {
   annualRate: 0.10,
-  annualInflation: 0.04,
+  annualInflation: 0.05,
   monthlyManagementFee: 0.001,
   quarterlyAdminFee: 0.009,
   monthlyFixedFeeUDI: 15,
