@@ -331,3 +331,37 @@ h3{font-size:24px;color:var(--blue)}
     width:100%;
   }
 }
+
+
+.privacy-consent{
+  display:flex;
+  align-items:flex-start;
+  gap:9px;
+  margin:10px 0 14px;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.45;
+}
+.privacy-consent input{
+  flex:0 0 auto;
+  width:16px;
+  height:16px;
+  margin:1px 0 0;
+  accent-color:var(--blue);
+}
+.privacy-consent a{
+  color:var(--blue);
+  text-decoration:underline;
+}
+.logo-card small{
+  display:block;
+  margin-top:7px;
+  font-size:11px;
+}
+.logo-card small a{
+  color:var(--blue);
+  text-decoration:underline;
+}
+.logo-card > a{
+  display:block;
+}
