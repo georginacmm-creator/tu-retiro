@@ -294,3 +294,40 @@ h3{font-size:24px;color:var(--blue)}
     font-size:10.5px;
   }
 }
+
+
+/* Descarga de PDF: secundaria frente al formulario */
+.projection-download{
+  margin:18px 0 0;
+  padding:14px 16px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#fafcfe;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+}
+.projection-download strong{
+  display:block;
+  color:var(--blue);
+  font-size:14px;
+}
+.projection-download p{
+  margin:3px 0 0;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.45;
+}
+.projection-download .btn{
+  flex:0 0 auto;
+}
+@media(max-width:620px){
+  .projection-download{
+    flex-direction:column;
+    align-items:stretch;
+  }
+  .projection-download .btn{
+    width:100%;
+  }
+}
