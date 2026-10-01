@@ -52,6 +52,14 @@ function projectScenario(monthly, months, increaseContributions = false) {
 }
 const $ = (id) => document.getElementById(id);
 
+function trackConversion(eventName, params = {}) {
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: eventName,
+    ...params
+  });
+}
+
 const money = (n) =>
   new Intl.NumberFormat("es-MX", {
     style: "currency",
@@ -978,6 +986,13 @@ if (leadForm) {
       ? monthly * 12 * 0.20
       : 0;
 
+    const inflationEnabled =
+      document.querySelector("#inflationChoice .choice.active")?.dataset.value !== "no";
+
+    const selectedProjection = inflationEnabled
+      ? projectionWithInflation
+      : projection;
+
     const lead = {
       name: formData.get("name") || "",
       whatsapp: formData.get("whatsapp") || "",
@@ -987,10 +1002,12 @@ if (leadForm) {
       age: age,
       retireAge: retireAge,
       years: Math.max(0, retireAge - age),
-      totalContrib: totalContrib,
-      growth: growth,
-      futureValue: futureValue,
-      fiscalBenefit: fiscalBenefit
+      totalContrib: selectedProjection.totalContrib,
+      growth: selectedProjection.growth,
+      futureValue: selectedProjection.futureValue,
+      fiscalBenefit: fiscalBenefit,
+      contributionScenario: inflationEnabled ? "Incremento 5% anual" : "Aportación mensual constante",
+      privacyConsent: formData.get("privacyConsent") === "on"
     };
 
     // Guardar una copia local
@@ -1007,7 +1024,7 @@ if (leadForm) {
 
     if (message) {
       message.textContent =
-        "Perfecto. Tus datos fueron enviados. Ahora podrás elegir fecha y hora para hablar conmigo.";
+        "Perfecto. Recibimos tu solicitud. Ahora puedes elegir fecha y hora para hablar conmigo.";
     }
 
     // Enviar prospecto a Google Sheets
@@ -1023,6 +1040,11 @@ if (leadForm) {
     } catch (error) {
       console.log("No se pudo enviar a Google Sheets", error);
     }
+
+    trackConversion("generate_lead", {
+      lead_source: "landing_form",
+      contribution_scenario: lead.contributionScenario
+    });
 
     // Preparar Calendly
     const calendlyUrl = new URL(CONFIG.calendly);
@@ -1075,6 +1097,9 @@ whatsappLinks.forEach((link) => {
 
   link.addEventListener("click", (event) => {
     event.preventDefault();
+    trackConversion("contact_whatsapp", {
+      lead_source: "landing_whatsapp"
+    });
     window.open(whatsappUrl, "_blank", "noopener");
   });
 });
