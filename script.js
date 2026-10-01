@@ -28,9 +28,11 @@ function calculate() {
   );
 
   const months = (retireAge - age) * 12;
-  // La proyección combina el 10% de rendimiento indicado y el 4% de inflación solicitado.
-  const projectedAnnualRate = CONFIG.annualRate + CONFIG.annualInflation;
-  const r = projectedAnnualRate / 12;
+  // La inflación se muestra como supuesto informativo; no se suma al rendimiento.
+  // Los cargos del producto se descuentan como una aproximación anual equivalente.
+  const annualCharges = (0.001 * 12) + (0.009 * 4);
+  const netAnnualRate = Math.max(0, CONFIG.annualRate - annualCharges);
+  const r = netAnnualRate / 12;
 
   const futureContrib =
     r === 0
@@ -125,9 +127,9 @@ if (downloadProjection) {
       );
       const years = retireAge - age;
       const months = years * 12;
-      // La proyección combina el 10% de rendimiento indicado y el 4% de inflación solicitado.
-      const projectedAnnualRate = CONFIG.annualRate + CONFIG.annualInflation;
-      const r = projectedAnnualRate / 12;
+      const annualCharges = (0.001 * 12) + (0.009 * 4);
+      const netAnnualRate = Math.max(0, CONFIG.annualRate - annualCharges);
+      const r = netAnnualRate / 12;
 
       const futureValue =
         r === 0
@@ -324,7 +326,8 @@ if (downloadProjection) {
       pdf.setFontSize(7.5);
       pdf.text(
         "Con una aportación mensual de " + moneyPDF(monthly) +
-        ", considerando 10% de rendimiento + 4% de inflación (14% anual de proyección).",
+        " y un supuesto de crecimiento anual del " +
+        Math.round(CONFIG.annualRate * 100) + "% antes de cargos.",
         14,
         87,
         { maxWidth: 82 }
@@ -336,7 +339,7 @@ if (downloadProjection) {
       metric(53, "Edad retiro", retireAge + " años");
       metric(89, "Aportación mensual", moneyPDF(monthly), "", monthly >= 100000 ? 8 : 9);
       metric(132, "Inflación considerada", Math.round(CONFIG.annualInflation * 100) + "%");
-      metric(169, "Tasa de proyección", Math.round(projectedAnnualRate * 100) + "%", "", 9);
+      metric(169, "Rendimiento supuesto", Math.round(CONFIG.annualRate * 100) + "%", "", 9);
 
       pdf.setDrawColor(...line);
       [48, 84, 127, 164].forEach((x) => pdf.line(x, 107, x, 125));
@@ -476,8 +479,8 @@ if (downloadProjection) {
       pdf.setFont("helvetica", "normal");
       pdf.setFontSize(7.5);
       pdf.text(
-        "Escenario calculado con la aportación mensual actual y una tasa de proyección de " +
-        Math.round(projectedAnnualRate * 100) + "% (10% de rendimiento + 4% de inflación).",
+        "Escenario calculado con la aportación mensual actual y un supuesto de crecimiento anual del " +
+        Math.round(CONFIG.annualRate * 100) + "% antes de cargos.",
         13,
         48
       );
@@ -876,8 +879,9 @@ if (leadForm) {
     const monthly = Number($("monthly")?.value || 0);
 
     const months = Math.max(0, (retireAge - age) * 12);
-    const projectedAnnualRate = CONFIG.annualRate + CONFIG.annualInflation;
-    const r = projectedAnnualRate / 12;
+    const annualCharges = (0.001 * 12) + (0.009 * 4);
+    const netAnnualRate = Math.max(0, CONFIG.annualRate - annualCharges);
+    const r = netAnnualRate / 12;
 
     const futureValue =
       r === 0
