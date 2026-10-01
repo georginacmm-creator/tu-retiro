@@ -90,23 +90,19 @@
               <div><span>Crecimiento proyectado</span><strong id="summaryGrowth">$26,682,629</strong></div>
             </div>
 
-            <div class="final-result">
-              <span>Patrimonio proyectado con actualización del 5% anual</span>
-              <strong id="futureValue">$32,042,629</strong>
-              <small>Escenario ilustrativo en el que tu aportación mensual aumenta 5% al inicio de cada año.</small>
+            <div class="inflation-choice" id="inflationChoice">
+              <div class="inflation-choice-title">¿Cómo quieres ver tu proyección?</div>
+              <p>Elige si quieres mantener la misma aportación o aumentarla 5% cada año.</p>
+              <div class="choice-grid">
+                <button type="button" class="choice" data-value="no">Sin incremento</button>
+                <button type="button" class="choice active" data-value="si">Incremento 5% anual</button>
+              </div>
             </div>
 
-            <div class="inflation-comparison">
-              <div>
-                <span>Sin actualización</span>
-                <strong id="futureValueWithoutInflation">$0</strong>
-                <small>Misma aportación mensual durante todo el plazo.</small>
-              </div>
-              <div>
-                <span>Con actualización 5% anual</span>
-                <strong id="futureValueWithInflation">$0</strong>
-                <small>La aportación aumenta 5% cada año. No se suma 5% al rendimiento.</small>
-              </div>
+            <div class="final-result">
+              <span id="futureValueLabel">Patrimonio proyectado con incremento del 5% anual</span>
+              <strong id="futureValue">$32,042,629</strong>
+              <small id="futureValueNote">Escenario ilustrativo. La aportación mensual aumenta 5% al inicio de cada año.</small>
             </div>
 
          <div class="projection-download" id="projectionDownloadArea">
