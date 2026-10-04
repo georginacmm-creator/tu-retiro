@@ -58,6 +58,18 @@ function trackConversion(eventName, params = {}) {
     event: eventName,
     ...params
   });
+
+  // Enviar la conversión de Google Ads únicamente cuando se genera un lead.
+  if (
+    eventName === "generate_lead" &&
+    typeof window.gtag === "function"
+  ) {
+    window.gtag("event", "conversion", {
+      send_to: "AW-18470671051/TWgdCJ3GiJAdEMulwOdE",
+      value: 1.0,
+      currency: "MXN"
+    });
+  }
 }
 
 const money = (n) =>
